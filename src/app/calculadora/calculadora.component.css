@@ -1,0 +1,125 @@
+/* Paleta de colores y variables */
+:root {
+  --color-primary: #6c5ce7;       /* Morado moderno */
+  --color-secondary: #00b894;     /* Verde esmeralda */
+  --color-background: #1e1e2f;    /* Fondo oscuro */
+  --color-surface: #2d2d44;       /* Superficie oscura */
+  --color-text: #ffffff;          /* Texto blanco */
+  --color-text-secondary: #b2b2b2; /* Texto secundario */
+  --color-accent: #ff7675;        /* Rojo coral para acentos */
+}
+
+/* Contenedor principal */
+.calculadora-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--color-background);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  color: var(--color-text);
+}
+
+/* Título principal */
+.calculadora-titulo {
+  text-align: center;
+  color: var(--color-primary);
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Contenedores para opciones, formulario y resultado */
+.opciones-container,
+.formulario-container,
+.resultado-container {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: var(--color-surface);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Botones */
+button {
+  background-color: var(--color-primary);
+  color: var(--color-text);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin: 0.5rem; /* Espaciado entre botones */
+}
+
+button:hover {
+  background-color: var(--color-secondary);
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Inputs del formulario */
+input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--color-primary);
+  border-radius: 6px;
+  font-size: 1rem;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  transition: border-color 0.3s ease;
+}
+
+input:focus {
+  border-color: var(--color-secondary);
+  outline: none;
+}
+
+/* Grupos del formulario */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-secondary);
+}
+
+/* Imagen responsive */
+.imagen-container {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.imagen-responsive {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos responsive */
+@media (max-width: 768px) {
+  .calculadora-container {
+    padding: 1rem;
+  }
+
+  .calculadora-titulo {
+    font-size: 2rem;
+  }
+
+  .opciones-container,
+  .formulario-container,
+  .resultado-container {
+    padding: 1rem;
+  }
+}

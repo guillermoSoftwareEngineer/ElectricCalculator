@@ -1,0 +1,124 @@
+<div class="calculadora-container">
+  <h1 class="calculadora-titulo">Calculadora Reactiva</h1>
+
+  <!-- Opciones principales -->
+  <div class="opciones-container">
+    <h2>Selecciona una opción principal:</h2>
+    <div class="opciones-list">
+      <button
+        *ngFor="let opcion of opcionesPrincipales"
+        (click)="seleccionarOpcion(opcion)"
+        [class.active]="opcion === opcionSeleccionada"
+      >
+        {{ opcion }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Subopciones -->
+  <div class="opciones-container" *ngIf="opcionSeleccionada">
+    <h2>Selecciona una subopción:</h2>
+    <div class="opciones-list">
+      <button
+        *ngFor="let subopcion of subopciones[opcionSeleccionada]"
+        (click)="seleccionarSubopcion(subopcion)"
+        [class.active]="subopcion === subopcionSeleccionada"
+      >
+        {{ subopcion }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Opciones adicionales (Subsubopciones) -->
+  <div class="opciones-container" *ngIf="subopcionSeleccionada">
+    <h2>Selecciona una opción adicional:</h2>
+    <div class="opciones-list">
+      <button
+        *ngFor="let subsubopcion of subsubopcionesList"
+        (click)="seleccionarSubsubopcion(subsubopcion)"
+        [class.active]="subsubopcion === subsubopcionSeleccionada"
+      >
+        {{ subsubopcion }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Imagen relacionada a la opción final -->
+  <div class="imagen-container" *ngIf="subsubopcionSeleccionada">
+    <img
+      [src]="getImagePath(subsubopcionSeleccionada)"
+      alt="{{ subsubopcionSeleccionada }}"
+      class="imagen-responsive"
+    />
+  </div>
+
+  <!-- Formulario dinámico -->
+  <div class="formulario-container" *ngIf="subsubopcionSeleccionada">
+    <h2>Formulario para {{ subsubopcionSeleccionada }}</h2>
+    <form (ngSubmit)="calcular()">
+      <!-- Si es Sistemas monofásicos, se muestran solo 2 inputs -->
+      <ng-container *ngIf="opcionSeleccionada === 'Sistemas monofásicos'; else threeInputs">
+        <div class="form-group">
+          <label for="input1">Input 1:</label>
+          <input
+            type="number"
+            id="input1"
+            [(ngModel)]="formulario.input1"
+            name="input1"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="input2">Input 2:</label>
+          <input
+            type="number"
+            id="input2"
+            [(ngModel)]="formulario.input2"
+            name="input2"
+            required
+          />
+        </div>
+      </ng-container>
+      <!-- Para otros casos, se muestran 3 inputs -->
+      <ng-template #threeInputs>
+        <div class="form-group">
+          <label for="input1">Input 1:</label>
+          <input
+            type="number"
+            id="input1"
+            [(ngModel)]="formulario.input1"
+            name="input1"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="input2">Input 2:</label>
+          <input
+            type="number"
+            id="input2"
+            [(ngModel)]="formulario.input2"
+            name="input2"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="input3">Input 3:</label>
+          <input
+            type="number"
+            id="input3"
+            [(ngModel)]="formulario.input3"
+            name="input3"
+            required
+          />
+        </div>
+      </ng-template>
+      <button type="submit">Calcular</button>
+    </form>
+  </div>
+
+  <!-- Resultado -->
+  <div class="resultado-container" *ngIf="resultado !== null">
+    <h2>Resultado</h2>
+    <p>{{ resultado }}</p>
+  </div>
+</div>
