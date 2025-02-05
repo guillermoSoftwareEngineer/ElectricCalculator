@@ -1,7 +1,7 @@
 // Definición de la interfaz para las ecuaciones
 interface Equation {
   formula: string;
-  variables: string[]; // Por ejemplo, ["V", "R"]
+  variables: string[]; // Ejemplo: ["V", "R"]
   compute: (inputs: { [key: string]: number }) => number;
 }
 
@@ -44,16 +44,12 @@ export class CalculadoraComponent {
   subopcionSeleccionada: string | null = null;
 
   /*
-    Para la mayoría de los grupos se utiliza un objeto indexado de subsubopciones (arreglo de strings).
-    Para Sistemas monofásicos se utilizará la estructura "monofasicoEquations".
+    Para la mayoría de los grupos se usa un objeto indexado (arreglo de strings) de subsubopciones.
+    Para Sistemas monofásicos y Sistemas trifásicos usaremos estructuras especiales que definen la ecuación,
+    sus variables y la función de cálculo.
   */
   subsubopciones: { [main: string]: { [sub: string]: string[] } } = {
-    'Sistemas trifásicos': {
-      'Vatios': ['W = V * I * sqrt(3)', 'W = V² / (R * sqrt(3))', 'W = I² * R * sqrt(3)'],
-      'Resistencia': ['R = V / I', 'R = V² / W', 'R = W / I²'],
-      'Corriente': ['I = V / (R * sqrt(3))', 'I = W / (V * sqrt(3))', 'I = sqrt(W / (R * sqrt(3)))'],
-      'Voltaje': ['V = I * R * sqrt(3)', 'V = W / (I * sqrt(3))', 'V = sqrt(W * R * sqrt(3))']
-    },
+    // Para otros grupos (no modificamos)
     'Análisis AC trifásico': {
       'Resistencia': ['R = V * cosφ / I', 'R = (V * cosφ)² / W', 'R = W / (I² * cosφ)'],
       'Corriente': ['I = V * cosφ / R', 'I = W / (V * cosφ)', 'I = sqrt(W / (R * cosφ))'],
@@ -174,78 +170,14 @@ export class CalculadoraComponent {
         "V = kVA / (1.73 * I * sen(φ))"
       ],
       'R': [
-        "R = Z * cos(φ)",
-        "R = sqrt(Z² - X²)",
-        "R = (V * cos(φ)) / I",
-        "R = (V * cos(φ))² / W",
-        "R = (VA * cos(φ)) / (3 * I²)",
-        "R = (X * cos(φ)) / sen(φ)",
-        "R = (W * X) / (VA * sen(φ))",
-        "R = W / VA",
-        "R = (W * Z) / (VA * sen(φ))",
-        "R = (W * Z) / (3 * I²)",
-        "R = (Z * sen(φ)) / tan(φ)",
-        "R = (N² * W) / (VAR * W)"
+        "R = V / I",  // Se pueden usar las mismas fórmulas que en monofásicos
+        "R = V² / W",
+        "R = W / I²"
       ],
       'W': [
-        "W = V * I * 1.73 * cos(φ)",
-        "W = 2 * 3.1416 * f * cos(φ) * I²",
-        "W = (V² * cos²(φ)) / Z",
-        "W = (VA * cos(φ) * tan(φ)) / X",
-        "W = (VA² * cos²(φ)) / Z",
-        "W = (V² * cos²(φ)) / R",
-        "W = (X * tan(φ)) / Z",
-        "W = (VA * sen(φ)) / X",
-        "W = VA * cos(φ)",
-        "W = (VA * X) / tan(φ)",
-        "W = (V² * X) / Z",
-        "W = (V² * X) / (2 * X² + Z²)",
-        "W = (VA² * X) / (2 * X² + Z²)"
-      ],
-      'tag PHI': [
-        "tan(φ) = VAR / W",
-        "tan(φ) = X / R",
-        "tan(φ) = (Z * sen(φ)) / R",
-        "tan(φ) = sen(φ) / cos(φ)",
-        "tan(φ) = (V * I * 1.73 * cos(φ)) / W",
-        "tan(φ) = (VA * sen(φ)) / W",
-        "tan(φ) = (VAR * VA) / (VA² - VAR²)",
-        "tan(φ) = (VAR) / (VA * cos(φ))",
-        "tan(φ) = (X * V²) / (Z² - X²)",
-        "tan(φ) = (sen(φ) * V * I) / cos(φ)",
-        "tan(φ) = X / (Z * cos(φ))",
-        "tan(φ) = VAR / (1.73 * V * I * cos(φ))",
-        "tan(φ) = (V * IA * Z - W) / W"
-      ],
-      'cos PHI': [
-        "cos(φ) = W / sqrt(W² + VAR²)",
-        "cos(φ) = W / (1.73 * V * I)",
-        "cos(φ) = sqrt(VA² - VAR²) / VA",
-        "cos(φ) = R / sqrt(R² + X²)",
-        "cos(φ) = 1 / sqrt(1 + tan²(φ))",
-        "cos(φ) = R / Z",
-        "cos(φ) = W / VA",
-        "cos(φ) = VAR / (VA * tan(φ))",
-        "cos(φ) = (W * sen(φ)) / VAR",
-        "cos(φ) = sen(φ) / tan(φ)",
-        "cos(φ) = X / (Z * tan(φ))",
-        "cos(φ) = (Z * W) / V²",
-        "cos(φ) = (V * I * sen²(φ))"
-      ],
-      'sen PHI': [
-        "sen(φ) = VAR / sqrt(W² + VAR²)",
-        "sen(φ) = W * tan(φ) / sqrt(W² + VAR²)",
-        "sen(φ) = sqrt(1 - cos²(φ))",
-        "sen(φ) = (X * tan(φ)) / Z",
-        "sen(φ) = (V * I * tan(φ)) / (1.73 * W)",
-        "sen(φ) = (VAR) / (W * cos(φ))",
-        "sen(φ) = sqrt(1 - (W/VA)²)",
-        "sen(φ) = (X / Z) * cos(φ)",
-        "sen(φ) = (V * I * sen(φ)) / W",
-        "sen(φ) = (W * tan(φ)) / (VA)",
-        "sen(φ) = (VAR * tan(φ)) / (VA)",
-        "sen(φ) = (V * I * tan(φ)) / (1.73 * VA)",
-        "sen(φ) = (W * tan(φ)) / (VAR)"
+        "W = V * I * sqrt(3)",
+        "W = V² / (R * sqrt(3))",
+        "W = I² * R * sqrt(3)"
       ]
     }
   };
@@ -255,7 +187,7 @@ export class CalculadoraComponent {
 
   /*
     Definición del formulario:
-    - Para Sistemas monofásicos se utilizarán inputs personalizados (las claves serán los nombres de las variables de la ecuación seleccionada).
+    - Para Sistemas monofásicos y Sistemas trifásicos usaremos inputs personalizados (las claves serán los nombres de las variables de la ecuación seleccionada).
     - Para los demás se usarán 3 inputs genéricos: "input1", "input2" y "input3".
   */
   formulario: { [key: string]: number | null } = {
@@ -290,11 +222,17 @@ export class CalculadoraComponent {
   }
 
   // Método para seleccionar una subsubopción
-  // Para Sistemas monofásicos, se espera un índice (number); para los demás, una cadena (string)
+  // Para Sistemas monofásicos y Sistemas trifásicos, se espera que se reciba un índice (number);
+  // para los demás, se recibirá una cadena (string)
   seleccionarSubsubopcion(param: number | string): void {
     if (this.opcionSeleccionada === 'Sistemas monofásicos' && this.subopcionSeleccionada) {
       if (typeof param === 'number') {
         this.selectedEquation = this.monofasicoEquations[this.subopcionSeleccionada][param];
+        this.resetearFormulario(true);
+      }
+    } else if (this.opcionSeleccionada === 'Sistemas trifásicos' && this.subopcionSeleccionada) {
+      if (typeof param === 'number') {
+        this.selectedEquation = this.trifasicoEquations[this.subopcionSeleccionada][param];
         this.resetearFormulario(true);
       }
     } else {
@@ -305,13 +243,14 @@ export class CalculadoraComponent {
     }
   }
 
-  // Propiedad para almacenar la ecuación seleccionada en Sistemas monofásicos
+  // Propiedad para almacenar la ecuación seleccionada en Sistemas monofásicos y trifásicos
   selectedEquation: Equation | null = null;
 
   // resetearFormulario: Si resetInputs es true, reinicia el objeto 'formulario'
   resetearFormulario(resetInputs: boolean = true): void {
     if (resetInputs) {
-      if (this.opcionSeleccionada === 'Sistemas monofásicos' && this.selectedEquation) {
+      if ((this.opcionSeleccionada === 'Sistemas monofásicos' || this.opcionSeleccionada === 'Sistemas trifásicos') && this.selectedEquation) {
+        // Se reinicializa el formulario usando las variables definidas en la ecuación seleccionada.
         this.formulario = {};
         for (const variable of this.selectedEquation.variables) {
           this.formulario[variable] = null;
@@ -323,14 +262,14 @@ export class CalculadoraComponent {
     this.resultado = null;
   }
 
-  // Getter para obtener las etiquetas de las variables de la ecuación seleccionada en Sistemas monofásicos
+  // Getter para obtener las etiquetas de las variables de la ecuación seleccionada (para Sistemas monofásicos y trifásicos)
   get monofasicoVariableLabels(): string[] {
     return this.selectedEquation ? this.selectedEquation.variables : [];
   }
 
   // Método para calcular el resultado
   calcular(): void {
-    if (this.opcionSeleccionada === 'Sistemas monofásicos') {
+    if (this.opcionSeleccionada === 'Sistemas monofásicos' || this.opcionSeleccionada === 'Sistemas trifásicos') {
       if (this.selectedEquation) {
         // Verificamos que se hayan ingresado todos los valores para cada variable
         for (const variable of this.selectedEquation.variables) {
@@ -339,7 +278,6 @@ export class CalculadoraComponent {
             return;
           }
         }
-        // Se fuerza la conversión a número usando el operador +
         const inputs: { [key: string]: number } = {};
         for (const variable of this.selectedEquation.variables) {
           inputs[variable] = +this.formulario[variable]!;
@@ -363,6 +301,8 @@ export class CalculadoraComponent {
     if (this.opcionSeleccionada && this.subopcionSeleccionada) {
       if (this.opcionSeleccionada === 'Sistemas monofásicos') {
         return this.monofasicoEquations[this.subopcionSeleccionada].map(eq => eq.formula);
+      } else if (this.opcionSeleccionada === 'Sistemas trifásicos') {
+        return this.trifasicoEquations[this.subopcionSeleccionada].map(eq => eq.formula);
       } else {
         return this.subsubopciones[this.opcionSeleccionada][this.subopcionSeleccionada];
       }
@@ -438,6 +378,78 @@ export class CalculadoraComponent {
         formula: "V = sqrt(W * R)",
         variables: ["W", "R"],
         compute: (inp: { [key: string]: number }) => Math.sqrt(+inp["W"] * +inp["R"])
+      }
+    ]
+  };
+
+  // Estructura específica para Sistemas trifásicos
+  trifasicoEquations: { [sub: string]: Equation[] } = {
+    'Vatios': [
+      {
+        formula: "W = V * I * sqrt(3)",
+        variables: ["V", "I"],
+        compute: (inp: { [key: string]: number }) => +inp["V"] * +inp["I"] * Math.sqrt(3)
+      },
+      {
+        formula: "W = V² / (R * sqrt(3))",
+        variables: ["V", "R"],
+        compute: (inp: { [key: string]: number }) => Math.pow(+inp["V"], 2) / (+inp["R"] * Math.sqrt(3))
+      },
+      {
+        formula: "W = I² * R * sqrt(3)",
+        variables: ["I", "R"],
+        compute: (inp: { [key: string]: number }) => Math.pow(+inp["I"], 2) * +inp["R"] * Math.sqrt(3)
+      }
+    ],
+    'Resistencia': [
+      {
+        formula: "R = V / I",
+        variables: ["V", "I"],
+        compute: (inp: { [key: string]: number }) => +inp["V"] / +inp["I"]
+      },
+      {
+        formula: "R = V² / W",
+        variables: ["V", "W"],
+        compute: (inp: { [key: string]: number }) => Math.pow(+inp["V"], 2) / +inp["W"]
+      },
+      {
+        formula: "R = W / I²",
+        variables: ["W", "I"],
+        compute: (inp: { [key: string]: number }) => +inp["W"] / Math.pow(+inp["I"], 2)
+      }
+    ],
+    'Corriente': [
+      {
+        formula: "I = V / (R * sqrt(3))",
+        variables: ["V", "R"],
+        compute: (inp: { [key: string]: number }) => +inp["V"] / (+inp["R"] * Math.sqrt(3))
+      },
+      {
+        formula: "I = W / (V * sqrt(3))",
+        variables: ["W", "V"],
+        compute: (inp: { [key: string]: number }) => +inp["W"] / (+inp["V"] * Math.sqrt(3))
+      },
+      {
+        formula: "I = sqrt(W / (R * sqrt(3)))",
+        variables: ["W", "R"],
+        compute: (inp: { [key: string]: number }) => Math.sqrt(+inp["W"] / (+inp["R"] * Math.sqrt(3)))
+      }
+    ],
+    'Voltaje': [
+      {
+        formula: "V = I * R * sqrt(3)",
+        variables: ["I", "R"],
+        compute: (inp: { [key: string]: number }) => +inp["I"] * +inp["R"] * Math.sqrt(3)
+      },
+      {
+        formula: "V = W / (I * sqrt(3))",
+        variables: ["W", "I"],
+        compute: (inp: { [key: string]: number }) => +inp["W"] / (+inp["I"] * Math.sqrt(3))
+      },
+      {
+        formula: "V = sqrt(W * R * sqrt(3))",
+        variables: ["W", "R"],
+        compute: (inp: { [key: string]: number }) => Math.sqrt(+inp["W"] * +inp["R"] * Math.sqrt(3))
       }
     ]
   };
