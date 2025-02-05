@@ -33,41 +33,67 @@
   <div class="opciones-container" *ngIf="subopcionSeleccionada">
     <h2>Selecciona una opción adicional:</h2>
     <div class="opciones-list">
-      <!-- Si es Sistemas monofásicos o trifásicos, mostramos las fórmulas de las ecuaciones personalizadas -->
-      <ng-container *ngIf="opcionSeleccionada === 'Sistemas monofásicos' || opcionSeleccionada === 'Sistemas trifásicos'; else otros">
+      <!-- Para Sistemas monofásicos -->
+      <ng-container *ngIf="opcionSeleccionada === 'Sistemas monofásicos'; else verificarTrifasicos">
         <button
-          *ngFor="let item of (opcionSeleccionada === 'Sistemas monofásicos'
-                                ? monofasicoEquations[subopcionSeleccionada!]
-                                : trifasicoEquations[subopcionSeleccionada!]); let i = index"
+          *ngFor="let item of monofasicoEquations[subopcionSeleccionada!]; let i = index"
           (click)="seleccionarSubsubopcion(i)"
           [class.active]="selectedEquation && selectedEquation.formula === item.formula"
         >
           {{ item.formula }}
         </button>
       </ng-container>
-      <!-- Para los otros grupos se usa la estructura original (arreglo de strings) -->
-      <ng-template #otros>
-        <button
-          *ngFor="let item of (opcionSeleccionada ? subsubopciones[opcionSeleccionada][subopcionSeleccionada!] : [])"
-          (click)="seleccionarSubsubopcion(item)"
-          [class.active]="subsubopcionSeleccionada === item"
-        >
-          {{ item }}
-        </button>
+      <!-- Para Sistemas trifásicos -->
+      <ng-template #verificarTrifasicos>
+        <ng-container *ngIf="opcionSeleccionada === 'Sistemas trifásicos'; else verificarAcTrifasico">
+          <button
+            *ngFor="let item of trifasicoEquations[subopcionSeleccionada!]; let i = index"
+            (click)="seleccionarSubsubopcion(i)"
+            [class.active]="selectedEquation && selectedEquation.formula === item.formula"
+          >
+            {{ item.formula }}
+          </button>
+        </ng-container>
+      </ng-template>
+      <!-- Para Análisis AC trifásico -->
+      <ng-template #verificarAcTrifasico>
+        <ng-container *ngIf="opcionSeleccionada === 'Análisis AC trifásico'; else generico">
+          <button
+            *ngFor="let item of acTrifasicoEquations[subopcionSeleccionada!]; let i = index"
+            (click)="seleccionarSubsubopcion(i)"
+            [class.active]="selectedEquation && selectedEquation.formula === item.formula"
+          >
+            {{ item.formula }}
+          </button>
+        </ng-container>
+        <!-- Para otros grupos (arreglo de strings) -->
+        <ng-template #generico>
+          <button
+            *ngFor="let item of (opcionSeleccionada ? subsubopciones[opcionSeleccionada][subopcionSeleccionada!] : [])"
+            (click)="seleccionarSubsubopcion(item)"
+            [class.active]="subsubopcionSeleccionada === item"
+          >
+            {{ item }}
+          </button>
+        </ng-template>
       </ng-template>
     </div>
   </div>
 
   <!-- Imagen relacionada a la opción final -->
-  <div class="imagen-container" *ngIf="(opcionSeleccionada === 'Sistemas monofásicos' || opcionSeleccionada === 'Sistemas trifásicos') ? selectedEquation : subsubopcionSeleccionada">
+  <div class="imagen-container" *ngIf="( (opcionSeleccionada === 'Sistemas monofásicos' || opcionSeleccionada === 'Sistemas trifásicos' || opcionSeleccionada === 'Análisis AC trifásico') && selectedEquation) || (opcionSeleccionada !== 'Sistemas monofásicos' && opcionSeleccionada !== 'Sistemas trifásicos' && opcionSeleccionada !== 'Análisis AC trifásico' && subsubopcionSeleccionada)">
     <img
       [src]="
-        (opcionSeleccionada === 'Sistemas monofásicos' || opcionSeleccionada === 'Sistemas trifásicos')
+        (opcionSeleccionada === 'Sistemas monofásicos' ||
+         opcionSeleccionada === 'Sistemas trifásicos' ||
+         opcionSeleccionada === 'Análisis AC trifásico')
           ? getImagePath(selectedEquation?.formula || '')
           : getImagePath(subsubopcionSeleccionada || '')
       "
       [alt]="
-        (opcionSeleccionada === 'Sistemas monofásicos' || opcionSeleccionada === 'Sistemas trifásicos')
+        (opcionSeleccionada === 'Sistemas monofásicos' ||
+         opcionSeleccionada === 'Sistemas trifásicos' ||
+         opcionSeleccionada === 'Análisis AC trifásico')
           ? selectedEquation?.formula
           : subsubopcionSeleccionada
       "
@@ -75,12 +101,11 @@
     />
   </div>
 
-  <!-- Formulario dinámico para Sistemas monofásicos y trifásicos -->
-  <div class="formulario-container" *ngIf="(opcionSeleccionada === 'Sistemas monofásicos' || opcionSeleccionada === 'Sistemas trifásicos') && selectedEquation">
+  <!-- Formulario dinámico para Sistemas monofásicos, trifásicos y Análisis AC trifásico -->
+  <div class="formulario-container" *ngIf="(opcionSeleccionada === 'Sistemas monofásicos' || opcionSeleccionada === 'Sistemas trifásicos' || opcionSeleccionada === 'Análisis AC trifásico') && selectedEquation">
     <h2>Formulario para {{ selectedEquation.formula }}</h2>
     <form (ngSubmit)="calcular()">
-      <!-- Se generan los inputs dinámicamente usando los nombres de las variables -->
-      <div class="form-group" *ngFor="let variable of monofasicoVariableLabels">
+      <div class="form-group" *ngFor="let variable of equationVariableLabels">
         <label [for]="variable">{{ variable }}:</label>
         <input
           type="number"
@@ -95,7 +120,7 @@
   </div>
 
   <!-- Formulario genérico para otros casos -->
-  <div class="formulario-container" *ngIf="opcionSeleccionada !== 'Sistemas monofásicos' && opcionSeleccionada !== 'Sistemas trifásicos' && subsubopcionSeleccionada">
+  <div class="formulario-container" *ngIf="opcionSeleccionada !== 'Sistemas monofásicos' && opcionSeleccionada !== 'Sistemas trifásicos' && opcionSeleccionada !== 'Análisis AC trifásico' && subsubopcionSeleccionada">
     <h2>Formulario para {{ subsubopcionSeleccionada }}</h2>
     <form (ngSubmit)="calcular()">
       <div class="form-group">
