@@ -20,7 +20,7 @@
     <h2>Selecciona una subopción:</h2>
     <div class="opciones-list">
       <button
-        *ngFor="let subopcion of subopciones[opcionSeleccionada]"
+        *ngFor="let subopcion of (opcionSeleccionada ? subopciones[opcionSeleccionada] : [])"
         (click)="seleccionarSubopcion(subopcion)"
         [class.active]="subopcion === subopcionSeleccionada"
       >
@@ -33,85 +33,81 @@
   <div class="opciones-container" *ngIf="subopcionSeleccionada">
     <h2>Selecciona una opción adicional:</h2>
     <div class="opciones-list">
-      <button
-        *ngFor="let subsubopcion of subsubopcionesList"
-        (click)="seleccionarSubsubopcion(subsubopcion)"
-        [class.active]="subsubopcion === subsubopcionSeleccionada"
-      >
-        {{ subsubopcion }}
-      </button>
+      <!-- Para Sistemas monofásicos: iteramos sobre monofasicoEquations (arreglo de Equation) -->
+      <ng-container *ngIf="opcionSeleccionada === 'Sistemas monofásicos'; else noMonofasico">
+        <button
+          *ngFor="let eq of monofasicoEquations[subopcionSeleccionada!]; let i = index"
+          (click)="seleccionarSubsubopcion(i)"
+          [class.active]="selectedEquation && selectedEquation.formula === eq.formula"
+        >
+          {{ eq.formula }}
+        </button>
+      </ng-container>
+      <!-- Para otros grupos: se usa el arreglo de strings -->
+      <ng-template #noMonofasico>
+        <button
+          *ngFor="let item of subsubopciones[opcionSeleccionada!][subopcionSeleccionada!]; let i = index"
+          (click)="seleccionarSubsubopcion(item)"
+          [class.active]="subsubopcionSeleccionada === item"
+        >
+          {{ item }}
+        </button>
+      </ng-template>
     </div>
   </div>
 
   <!-- Imagen relacionada a la opción final -->
-  <div class="imagen-container" *ngIf="subsubopcionSeleccionada">
+  <div class="imagen-container" *ngIf="(opcionSeleccionada === 'Sistemas monofásicos' && selectedEquation) || (opcionSeleccionada !== 'Sistemas monofásicos' && subsubopcionSeleccionada)">
     <img
-      [src]="getImagePath(subsubopcionSeleccionada)"
-      alt="{{ subsubopcionSeleccionada }}"
+      [src]="
+        opcionSeleccionada === 'Sistemas monofásicos'
+          ? getImagePath(selectedEquation?.formula || '')
+          : getImagePath(subsubopcionSeleccionada || '')
+      "
+      [alt]="
+        opcionSeleccionada === 'Sistemas monofásicos'
+          ? selectedEquation?.formula
+          : subsubopcionSeleccionada
+      "
       class="imagen-responsive"
     />
   </div>
 
-  <!-- Formulario dinámico -->
-  <div class="formulario-container" *ngIf="subsubopcionSeleccionada">
+  <!-- Formulario dinámico para Sistemas monofásicos -->
+  <div class="formulario-container" *ngIf="opcionSeleccionada === 'Sistemas monofásicos' && selectedEquation">
+    <h2>Formulario para {{ selectedEquation.formula }}</h2>
+    <form (ngSubmit)="calcular()">
+      <!-- Generamos inputs dinámicamente usando los nombres de las variables (por ejemplo, "V" y "R") -->
+      <div class="form-group" *ngFor="let variable of monofasicoVariableLabels">
+        <label [for]="variable">{{ variable }}:</label>
+        <input
+          type="number"
+          [id]="variable"
+          [(ngModel)]="formulario[variable]"
+          [name]="variable"
+          required
+        />
+      </div>
+      <button type="submit">Calcular</button>
+    </form>
+  </div>
+
+  <!-- Formulario genérico para otros casos -->
+  <div class="formulario-container" *ngIf="opcionSeleccionada !== 'Sistemas monofásicos' && subsubopcionSeleccionada">
     <h2>Formulario para {{ subsubopcionSeleccionada }}</h2>
     <form (ngSubmit)="calcular()">
-      <!-- Si es Sistemas monofásicos, se muestran solo 2 inputs -->
-      <ng-container *ngIf="opcionSeleccionada === 'Sistemas monofásicos'; else threeInputs">
-        <div class="form-group">
-          <label for="input1">Input 1:</label>
-          <input
-            type="number"
-            id="input1"
-            [(ngModel)]="formulario.input1"
-            name="input1"
-            required
-          />
-        </div>
-        <div class="form-group">
-          <label for="input2">Input 2:</label>
-          <input
-            type="number"
-            id="input2"
-            [(ngModel)]="formulario.input2"
-            name="input2"
-            required
-          />
-        </div>
-      </ng-container>
-      <!-- Para otros casos, se muestran 3 inputs -->
-      <ng-template #threeInputs>
-        <div class="form-group">
-          <label for="input1">Input 1:</label>
-          <input
-            type="number"
-            id="input1"
-            [(ngModel)]="formulario.input1"
-            name="input1"
-            required
-          />
-        </div>
-        <div class="form-group">
-          <label for="input2">Input 2:</label>
-          <input
-            type="number"
-            id="input2"
-            [(ngModel)]="formulario.input2"
-            name="input2"
-            required
-          />
-        </div>
-        <div class="form-group">
-          <label for="input3">Input 3:</label>
-          <input
-            type="number"
-            id="input3"
-            [(ngModel)]="formulario.input3"
-            name="input3"
-            required
-          />
-        </div>
-      </ng-template>
+      <div class="form-group">
+        <label for="input1">Input 1:</label>
+        <input type="number" id="input1" [(ngModel)]="formulario['input1']" name="input1" required>
+      </div>
+      <div class="form-group">
+        <label for="input2">Input 2:</label>
+        <input type="number" id="input2" [(ngModel)]="formulario['input2']" name="input2" required>
+      </div>
+      <div class="form-group">
+        <label for="input3">Input 3:</label>
+        <input type="number" id="input3" [(ngModel)]="formulario['input3']" name="input3" required>
+      </div>
       <button type="submit">Calcular</button>
     </form>
   </div>
@@ -119,6 +115,6 @@
   <!-- Resultado -->
   <div class="resultado-container" *ngIf="resultado !== null">
     <h2>Resultado</h2>
-    <p>{{ resultado }}</p>
+    <p>{{ resultado }} Watios</p>
   </div>
 </div>

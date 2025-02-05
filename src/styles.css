@@ -1,18 +1,28 @@
-/* styles.css */
-/* Estilos globales para el tema oscuro */
+/* Estilos globales para el tema oscuro (Versión General) */
+:root {
+  --color-background: #141414;    /* Fondo principal muy oscuro */
+  --color-surface: #282828;       /* Superficies: gris oscuro */
+  --color-primary: #230046;       /* Primario: púrpura oscuro */
+  --color-secondary: #320064;     /* Secundario: púrpura intenso */
+  --color-text: #ecf0f1;          /* Texto claro */
+  --color-text-secondary: #cccccc; /* Texto secundario */
+  --color-border: #320064;         /* Borde: usando el color secundario */
+}
+
+/* Aplicación global de fondo y texto */
 body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #121212; /* Fondo oscuro global */
-  color: #ffffff; /* Texto blanco global */
+  background-color: var(--color-background);
+  color: var(--color-text);
 }
 
-/* Asegura que los enlaces tengan un color adecuado */
+/* Enlaces globales */
 a {
-  color: #6c5ce7; /* Morado moderno */
+  color: var(--color-primary);
   text-decoration: none;
 }
 
 a:hover {
-  color: #00b894; /* Verde esmeralda */
+  color: var(--color-secondary);
 }

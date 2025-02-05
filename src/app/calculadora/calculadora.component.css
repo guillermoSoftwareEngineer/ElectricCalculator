@@ -1,12 +1,12 @@
-/* Paleta de colores y variables */
+/* Paleta de colores basada en los valores proporcionados */
 :root {
-  --color-primary: #6c5ce7;       /* Morado moderno */
-  --color-secondary: #00b894;     /* Verde esmeralda */
-  --color-background: #1e1e2f;    /* Fondo oscuro */
-  --color-surface: #2d2d44;       /* Superficie oscura */
-  --color-text: #ffffff;          /* Texto blanco */
-  --color-text-secondary: #b2b2b2; /* Texto secundario */
-  --color-accent: #ff7675;        /* Rojo coral para acentos */
+  --color-background: #141414;    /* Fondo principal muy oscuro */
+  --color-surface: #282828;       /* Superficies: gris oscuro */
+  --color-primary: #230046;       /* Acento primario: tono púrpura oscuro */
+  --color-secondary: #320064;     /* Acento secundario: púrpura intenso */
+  --color-text: #ffffff;          /* Texto blanco para buen contraste */
+  --color-text-secondary: #cccccc; /* Texto secundario en gris claro */
+  --color-border: #320064;         /* Borde con el color secundario para coherencia */
 }
 
 /* Contenedor principal */
@@ -17,14 +17,14 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: var(--color-background);
   border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
   color: var(--color-text);
 }
 
 /* Título principal */
 .calculadora-titulo {
   text-align: center;
-  color: var(--color-primary);
+  color: var(--color-text-secondary);
   font-size: 2.5rem;
   font-weight: 600;
   margin-bottom: 2rem;
@@ -33,27 +33,35 @@
 }
 
 /* Contenedores para opciones, formulario y resultado */
+/* Contenedores para opciones, formulario y resultado */
 .opciones-container,
 .formulario-container,
 .resultado-container {
   margin-bottom: 2rem;
   padding: 1.5rem;
   background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  /* Alinea el contenido horizontalmente */
+  text-align: center; /* Opción simple */
+  /* Alternativamente, si se quieren centrar elementos flexibles: */
+ /* display: flex;
+     flex-wrap: wrap;
+     justify-content: center; */
 }
 
 /* Botones */
 button {
   background-color: var(--color-primary);
   color: var(--color-text);
-  border: none;
+  border: 1px solid var(--color-border);
   padding: 0.75rem 1.5rem;
   border-radius: 6px;
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  margin: 0.5rem; /* Espaciado entre botones */
+  margin: 0.5rem;
 }
 
 button:hover {
@@ -70,12 +78,17 @@ input {
   width: 100%;
   padding: 0.75rem;
   margin-bottom: 1rem;
-  border: 1px solid var(--color-primary);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   font-size: 1rem;
   background-color: var(--color-surface);
   color: var(--color-text);
   transition: border-color 0.3s ease;
+  box-sizing: border-box;  /* Asegura que el padding y el border se incluyan en el width */
+}
+
+input {
+  max-width: 100%;  /* Asegura que no sobrepase el contenedor */
 }
 
 input:focus {
@@ -104,7 +117,7 @@ input:focus {
   max-width: 100%;
   height: auto;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
 }
 
 /* Estilos responsive */
