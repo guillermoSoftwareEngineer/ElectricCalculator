@@ -1,7 +1,7 @@
 // Definición de la interfaz para las ecuaciones
 interface Equation {
   formula: string;
-  variables: string[]; // Ejemplo: ["V", "R"] o ["V", "cosφ", "I"]
+  variables: string[]; // Ejemplo: ["V", "R"] o ["V", "cosφ", "I"] o ["f", "L"], etc.
   compute: (inputs: { [key: string]: number }) => number;
 }
 
@@ -33,7 +33,7 @@ export class CalculadoraComponent {
   subopciones: { [key: string]: string[] } = {
     'Sistemas monofásicos': ['Vatios', 'Resistencia', 'Corriente', 'Voltaje'],
     'Sistemas trifásicos': ['Vatios', 'Resistencia', 'Corriente', 'Voltaje'],
-    'Análisis AC trifásico': ['Resistencia', 'Corriente', 'Potencia', 'Voltaje', 'cos φ (phi) '],
+    'Análisis AC trifásico': ['Resistencia', 'Corriente', 'Potencia', 'Voltaje', 'Factor de Potencia'],
     'Análisis AC velocidad angular': ['Frecuencia Angular (ω)', 'Reactancia Inductiva (XL)', 'Reactancia Capacitiva (XC)', 'Impedancia (Z)'],
     'Análisis AC General': [
       'KVAR', 'KW', 'KVA', 'X', 'Z', 'I', 'V', 'R', 'W', 'tag PHI', 'cos PHI', 'sen PHI', 'tan(φ)'
@@ -44,32 +44,25 @@ export class CalculadoraComponent {
   subopcionSeleccionada: string | null = null;
 
   /*
-    Para la mayoría de los grupos se utilizará un arreglo de strings (subsubopciones).
-    Sin embargo, para los grupos personalizados (Sistemas monofásicos, Sistemas trifásicos y Análisis AC trifásico)
-    se utilizarán las siguientes propiedades de ecuaciones.
-    Por ello, en 'subsubopciones' definimos solo los grupos que usan arreglos de strings.
+    Para grupos personalizados usaremos objetos de ecuaciones.
+    Para otros grupos se usan arreglos de strings en 'subsubopciones'.
   */
+  // Para Análisis AC trifásico y AC velocidad angular, definiremos los objetos correspondientes.
   subsubopciones: { [main: string]: { [sub: string]: string[] } } = {
-    // Ejemplo: para Análisis AC velocidad angular y AC General se mantienen los arreglos de strings (si es necesario)
-    'Análisis AC velocidad angular': {
-      'Frecuencia Angular (ω)': ['Opción 1', 'Opción 2'],
-      'Reactancia Inductiva (XL)': ['Opción 1', 'Opción 2'],
-      'Reactancia Capacitiva (XC)': ['Opción 1', 'Opción 2'],
-      'Impedancia (Z)': ['Opción 1', 'Opción 2']
-    },
+    // Dejamos, por ejemplo, "Análisis AC General" como arreglo genérico
     'Análisis AC General': {
-      'KVAR': ['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4', 'Opción 5', 'Opción 6', 'Opción 7', 'Opción 8', 'Opción 9', 'Opción 10', 'Opción 11', 'Opción 12', 'Opción 13'],
-      'KW': ['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4', 'Opción 5', 'Opción 6', 'Opción 7', 'Opción 8', 'Opción 9', 'Opción 10', 'Opción 11', 'Opción 12', 'Opción 13'],
-      'KVA': ['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4', 'Opción 5', 'Opción 6', 'Opción 7', 'Opción 8', 'Opción 9', 'Opción 10', 'Opción 11', 'Opción 12', 'Opción 13'],
-      'X': ['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4', 'Opción 5', 'Opción 6', 'Opción 7', 'Opción 8', 'Opción 9', 'Opción 10', 'Opción 11', 'Opción 12', 'Opción 13'],
-      'Z': ['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4', 'Opción 5', 'Opción 6', 'Opción 7', 'Opción 8', 'Opción 9', 'Opción 10', 'Opción 11', 'Opción 12', 'Opción 13'],
-      'I': ['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4', 'Opción 5', 'Opción 6', 'Opción 7', 'Opción 8', 'Opción 9', 'Opción 10', 'Opción 11', 'Opción 12', 'Opción 13'],
-      'V': ['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4', 'Opción 5', 'Opción 6', 'Opción 7', 'Opción 8', 'Opción 9', 'Opción 10', 'Opción 11', 'Opción 12', 'Opción 13'],
-      'R': ['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4', 'Opción 5', 'Opción 6', 'Opción 7', 'Opción 8', 'Opción 9', 'Opción 10', 'Opción 11', 'Opción 12'],
-      'W': ['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4', 'Opción 5', 'Opción 6', 'Opción 7', 'Opción 8', 'Opción 9', 'Opción 10', 'Opción 11', 'Opción 12', 'Opción 13'],
-      'tag PHI': ['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4', 'Opción 5', 'Opción 6', 'Opción 7', 'Opción 8', 'Opción 9', 'Opción 10', 'Opción 11', 'Opción 12', 'Opción 13'],
-      'cos PHI': ['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4', 'Opción 5', 'Opción 6', 'Opción 7', 'Opción 8', 'Opción 9', 'Opción 10', 'Opción 11', 'Opción 12', 'Opción 13'],
-      'sen PHI': ['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4', 'Opción 5', 'Opción 6', 'Opción 7', 'Opción 8', 'Opción 9', 'Opción 10', 'Opción 11', 'Opción 12', 'Opción 13']
+      'KVAR': ['Opción 1', 'Opción 2', 'Opción 3'],
+      'KW': ['Opción 1', 'Opción 2', 'Opción 3'],
+      'KVA': ['Opción 1', 'Opción 2', 'Opción 3'],
+      'X': ['Opción 1', 'Opción 2', 'Opción 3'],
+      'Z': ['Opción 1', 'Opción 2', 'Opción 3'],
+      'I': ['Opción 1', 'Opción 2', 'Opción 3'],
+      'V': ['Opción 1', 'Opción 2', 'Opción 3'],
+      'R': ['Opción 1', 'Opción 2', 'Opción 3'],
+      'W': ['Opción 1', 'Opción 2', 'Opción 3'],
+      'tag PHI': ['Opción 1', 'Opción 2', 'Opción 3'],
+      'cos PHI': ['Opción 1', 'Opción 2', 'Opción 3'],
+      'sen PHI': ['Opción 1', 'Opción 2', 'Opción 3']
     }
   };
 
@@ -78,9 +71,9 @@ export class CalculadoraComponent {
 
   /*
     Definición del formulario:
-    - Para los grupos personalizados (Sistemas monofásicos, Sistemas trifásicos, Análisis AC trifásico) se usarán inputs dinámicos,
-      donde las claves serán los nombres de las variables de la ecuación seleccionada.
-    - Para los demás se usarán 3 inputs genéricos.
+    - Para grupos personalizados (Sistemas monofásicos, Sistemas trifásicos, Análisis AC trifásico, Análisis AC velocidad angular)
+      se usarán inputs dinámicos; las claves serán las variables de la ecuación seleccionada.
+    - Para otros grupos se usan 3 inputs genéricos.
   */
   formulario: { [key: string]: number | null } = {
     input1: null,
@@ -312,7 +305,7 @@ export class CalculadoraComponent {
         compute: (inp: { [key: string]: number }) => Math.sqrt(+inp["W"] * +inp["R"]) / +inp["cosφ"]
       }
     ],
-    'cos φ (phi) ': [
+    'Factor de Potencia': [
       {
         formula: "cosφ = W / VA",
         variables: ["W", "VA"],
@@ -327,6 +320,61 @@ export class CalculadoraComponent {
         formula: "cosφ = sqrt(W / VA)",
         variables: ["W", "VA"],
         compute: (inp: { [key: string]: number }) => Math.sqrt(+inp["W"] / +inp["VA"])
+      }
+    ]
+  };
+
+  // Análisis AC velocidad angular
+  acVelocidadEquations: { [sub: string]: Equation[] } = {
+    'Frecuencia Angular (ω)': [
+      {
+        formula: "ω = 2 * π * f",
+        variables: ["f"],
+        compute: (inp: { [key: string]: number }) => 2 * Math.PI * (+inp["f"])
+      },
+      {
+        formula: "ω = 2 * 3.1416 * f",
+        variables: ["f"],
+        compute: (inp: { [key: string]: number }) => 2 * 3.1416 * (+inp["f"])
+      }
+    ],
+    'Reactancia Inductiva (XL)': [
+      {
+        formula: "XL = 2 * π * f * L",
+        variables: ["f", "L"],
+        compute: (inp: { [key: string]: number }) => 2 * Math.PI * (+inp["f"]) * (+inp["L"])
+      },
+      {
+        formula: "XL = ω * L",
+        variables: ["ω", "L"],
+        compute: (inp: { [key: string]: number }) => (+inp["ω"]) * (+inp["L"])
+      }
+    ],
+    'Reactancia Capacitiva (XC)': [
+      {
+        formula: "XC = 1 / (2 * π * f * C)",
+        variables: ["f", "C"],
+        compute: (inp: { [key: string]: number }) => 1 / (2 * Math.PI * (+inp["f"]) * (+inp["C"]))
+      },
+      {
+        formula: "XC = 1 / (ω * C)",
+        variables: ["ω", "C"],
+        compute: (inp: { [key: string]: number }) => 1 / ((+inp["ω"]) * (+inp["C"]))
+      }
+    ],
+    'Impedancia (Z)': [
+      {
+        formula: "Z = R + j(XL - XC)",
+        variables: ["R", "XL", "XC"],
+        compute: (inp: { [key: string]: number }) => {
+          // Usamos la magnitud: sqrt(R² + (XL - XC)²)
+          return Math.sqrt(Math.pow(+inp["R"], 2) + Math.pow((+inp["XL"] - +inp["XC"]), 2));
+        }
+      },
+      {
+        formula: "Z = sqrt(R² + (XL - XC)²)",
+        variables: ["R", "XL", "XC"],
+        compute: (inp: { [key: string]: number }) => Math.sqrt(Math.pow(+inp["R"], 2) + Math.pow((+inp["XL"] - +inp["XC"]), 2))
       }
     ]
   };
@@ -353,7 +401,7 @@ export class CalculadoraComponent {
   }
 
   // Método para seleccionar una subsubopción
-  // Para los grupos personalizados (Sistemas monofásicos, trifásicos y AC trifásico) se espera un índice (number)
+  // Para grupos personalizados (Sistemas monofásicos, Sistemas trifásicos, Análisis AC trifásico, Análisis AC velocidad angular) se espera un índice (number)
   // Para otros casos se espera una cadena (string)
   seleccionarSubsubopcion(param: number | string): void {
     if (this.opcionSeleccionada === 'Sistemas monofásicos' && this.subopcionSeleccionada) {
@@ -371,6 +419,11 @@ export class CalculadoraComponent {
         this.selectedEquation = this.acTrifasicoEquations[this.subopcionSeleccionada][param];
         this.resetearFormulario(true);
       }
+    } else if (this.opcionSeleccionada === 'Análisis AC velocidad angular' && this.subopcionSeleccionada) {
+      if (typeof param === 'number') {
+        this.selectedEquation = this.acVelocidadEquations[this.subopcionSeleccionada][param];
+        this.resetearFormulario(true);
+      }
     } else {
       if (typeof param === 'string') {
         this.subsubopcionSeleccionada = param;
@@ -379,7 +432,7 @@ export class CalculadoraComponent {
     }
   }
 
-  // Getter para obtener la lista de subsubopciones (fórmulas) según el grupo
+  // Getter para obtener la lista de subsubopciones (fórmulas) según el grupo seleccionado
   get subsubopcionesList(): string[] {
     if (this.opcionSeleccionada && this.subopcionSeleccionada) {
       if (this.opcionSeleccionada === 'Sistemas monofásicos') {
@@ -388,6 +441,8 @@ export class CalculadoraComponent {
         return this.trifasicoEquations[this.subopcionSeleccionada].map(eq => eq.formula);
       } else if (this.opcionSeleccionada === 'Análisis AC trifásico') {
         return this.acTrifasicoEquations[this.subopcionSeleccionada].map(eq => eq.formula);
+      } else if (this.opcionSeleccionada === 'Análisis AC velocidad angular') {
+        return this.acVelocidadEquations[this.subopcionSeleccionada].map(eq => eq.formula);
       } else {
         return this.subsubopciones[this.opcionSeleccionada][this.subopcionSeleccionada];
       }
@@ -395,22 +450,25 @@ export class CalculadoraComponent {
     return [];
   }
 
-  // Getter para obtener las etiquetas de las variables de la ecuación seleccionada
+  // Getter para obtener las etiquetas de las variables de la ecuación seleccionada (para grupos personalizados)
   get equationVariableLabels(): string[] {
     return this.selectedEquation ? this.selectedEquation.variables : [];
   }
 
   // Método para resetear el formulario
-  // Si resetInputs es true y se está en un grupo personalizado, se reinicializa 'formulario' usando las variables de la ecuación
+  // Si resetInputs es true y se está en un grupo personalizado, se reinicializa 'formulario' usando las variables de la ecuación seleccionada.
   resetearFormulario(resetInputs: boolean = true): void {
     if (resetInputs) {
-      if ((this.opcionSeleccionada === 'Sistemas monofásicos' ||
-           this.opcionSeleccionada === 'Sistemas trifásicos' ||
-           this.opcionSeleccionada === 'Análisis AC trifásico')
-          && this.selectedEquation) {
+      if (
+        (this.opcionSeleccionada === 'Sistemas monofásicos' ||
+          this.opcionSeleccionada === 'Sistemas trifásicos' ||
+          this.opcionSeleccionada === 'Análisis AC trifásico' ||
+          this.opcionSeleccionada === 'Análisis AC velocidad angular') &&
+        this.selectedEquation
+      ) {
         this.formulario = {};
         for (const variable of this.selectedEquation.variables) {
-          // Para Análisis AC trifásico, si la variable es "cosφ", se asigna un valor por defecto de 0.9000
+          // Para Análisis AC trifásico, si la variable es "cosφ", se asigna un valor predeterminado de 0.9000
           if (this.opcionSeleccionada === 'Análisis AC trifásico' && variable === 'cosφ') {
             this.formulario[variable] = 0.9000;
           } else {
@@ -429,10 +487,11 @@ export class CalculadoraComponent {
     if (
       this.opcionSeleccionada === 'Sistemas monofásicos' ||
       this.opcionSeleccionada === 'Sistemas trifásicos' ||
-      this.opcionSeleccionada === 'Análisis AC trifásico'
+      this.opcionSeleccionada === 'Análisis AC trifásico' ||
+      this.opcionSeleccionada === 'Análisis AC velocidad angular'
     ) {
       if (this.selectedEquation) {
-        // Verificar que se hayan ingresado todos los valores
+        // Verificar que se hayan ingresado todos los valores para cada variable
         for (const variable of this.selectedEquation.variables) {
           if (this.formulario[variable] == null) {
             alert(`Por favor, ingrese el valor de ${variable}.`);
