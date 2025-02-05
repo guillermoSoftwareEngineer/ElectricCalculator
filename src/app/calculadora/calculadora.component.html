@@ -8,8 +8,7 @@
       <button
         *ngFor="let opcion of opcionesPrincipales"
         (click)="seleccionarOpcion(opcion)"
-        [class.active]="opcion === opcionSeleccionada"
-      >
+        [class.active]="opcion === opcionSeleccionada">
         {{ opcion }}
       </button>
     </div>
@@ -22,8 +21,7 @@
       <button
         *ngFor="let subopcion of (opcionSeleccionada ? subopciones[opcionSeleccionada] : [])"
         (click)="seleccionarSubopcion(subopcion)"
-        [class.active]="subopcion === subopcionSeleccionada"
-      >
+        [class.active]="subopcion === subopcionSeleccionada">
         {{ subopcion }}
       </button>
     </div>
@@ -33,93 +31,96 @@
   <div class="opciones-container" *ngIf="subopcionSeleccionada">
     <h2>Selecciona una opción adicional:</h2>
     <div class="opciones-list">
-      <!-- Caso personalizado para Sistemas monofásicos -->
-      <ng-container *ngIf="opcionSeleccionada === 'Sistemas monofásicos'; else noMono">
+      <!-- Caso para Sistemas monofásicos -->
+      <ng-container *ngIf="opcionSeleccionada === 'Sistemas monofásicos'">
         <button
           *ngFor="let item of monofasicoEquations[subopcionSeleccionada!] ; let i = index"
           (click)="seleccionarSubsubopcion(i)"
-          [class.active]="selectedEquation && selectedEquation.formula === item.formula"
-        >
+          [class.active]="selectedEquation && selectedEquation.formula === item.formula">
           {{ item.formula }}
         </button>
       </ng-container>
-      <!-- Caso personalizado para Sistemas trifásicos -->
-      <ng-template #noMono>
-        <ng-container *ngIf="opcionSeleccionada === 'Sistemas trifásicos'; else noAcTrifasico">
-          <button
-            *ngFor="let item of trifasicoEquations[subopcionSeleccionada!] ; let i = index"
-            (click)="seleccionarSubsubopcion(i)"
-            [class.active]="selectedEquation && selectedEquation.formula === item.formula"
-          >
-            {{ item.formula }}
-          </button>
-        </ng-container>
-      </ng-template>
-      <!-- Caso personalizado para Análisis AC trifásico -->
-      <ng-template #noAcTrifasico>
-        <ng-container *ngIf="opcionSeleccionada === 'Análisis AC trifásico'; else noAcVelocidad">
-          <button
-            *ngFor="let item of acTrifasicoEquations[subopcionSeleccionada!] ; let i = index"
-            (click)="seleccionarSubsubopcion(i)"
-            [class.active]="selectedEquation && selectedEquation.formula === item.formula"
-          >
-            {{ item.formula }}
-          </button>
-        </ng-container>
-      </ng-template>
-      <!-- Caso personalizado para Análisis AC velocidad angular -->
-      <ng-template #noAcVelocidad>
-        <ng-container *ngIf="opcionSeleccionada === 'Análisis AC velocidad angular'">
-          <button
-            *ngFor="let item of acVelocidadEquations[subopcionSeleccionada!] ; let i = index"
-            (click)="seleccionarSubsubopcion(i)"
-            [class.active]="selectedEquation && selectedEquation.formula === item.formula"
-          >
-            {{ item.formula }}
-          </button>
-        </ng-container>
-        <!-- Caso genérico para otros grupos (arreglo de strings) -->
-        <ng-template *ngIf="opcionSeleccionada !== 'Análisis AC velocidad angular'">
-          <button
-            *ngFor="let item of (opcionSeleccionada ? subsubopciones[opcionSeleccionada][subopcionSeleccionada!] : [])"
-            (click)="seleccionarSubsubopcion(item)"
-            [class.active]="subsubopcionSeleccionada === item"
-          >
-            {{ item }}
-          </button>
-        </ng-template>
-      </ng-template>
+
+      <!-- Caso para Sistemas trifásicos -->
+      <ng-container *ngIf="opcionSeleccionada === 'Sistemas trifásicos'">
+        <button
+          *ngFor="let item of trifasicoEquations[subopcionSeleccionada!] ; let i = index"
+          (click)="seleccionarSubsubopcion(i)"
+          [class.active]="selectedEquation && selectedEquation.formula === item.formula">
+          {{ item.formula }}
+        </button>
+      </ng-container>
+
+      <!-- Caso para Análisis AC trifásico -->
+      <ng-container *ngIf="opcionSeleccionada === 'Análisis AC trifásico'">
+        <button
+          *ngFor="let item of acTrifasicoEquations[subopcionSeleccionada!] ; let i = index"
+          (click)="seleccionarSubsubopcion(i)"
+          [class.active]="selectedEquation && selectedEquation.formula === item.formula">
+          {{ item.formula }}
+        </button>
+      </ng-container>
+
+      <!-- Caso para Análisis AC velocidad angular -->
+      <ng-container *ngIf="opcionSeleccionada === 'Análisis AC velocidad angular'">
+        <button
+          *ngFor="let item of acVelocidadEquations[subopcionSeleccionada!] ; let i = index"
+          (click)="seleccionarSubsubopcion(i)"
+          [class.active]="selectedEquation && selectedEquation.formula === item.formula">
+          {{ item.formula }}
+        </button>
+      </ng-container>
+
+      <!-- Caso para Análisis AC General -->
+      <ng-container *ngIf="opcionSeleccionada === 'Análisis AC General'">
+        <button
+          *ngFor="let item of acGeneralEquations[subopcionSeleccionada!] ; let i = index"
+          (click)="seleccionarSubsubopcion(i)"
+          [class.active]="selectedEquation && selectedEquation.formula === item.formula">
+          {{ item.formula }}
+        </button>
+      </ng-container>
     </div>
   </div>
 
-  <!-- Imagen relacionada a la opción final -->
-  <div class="imagen-container" *ngIf="( (opcionSeleccionada === 'Sistemas monofásicos' || opcionSeleccionada === 'Sistemas trifásicos' || opcionSeleccionada === 'Análisis AC trifásico' || opcionSeleccionada === 'Análisis AC velocidad angular') && selectedEquation) || (opcionSeleccionada !== 'Sistemas monofásicos' && opcionSeleccionada !== 'Sistemas trifásicos' && opcionSeleccionada !== 'Análisis AC trifásico' && opcionSeleccionada !== 'Análisis AC velocidad angular' && subsubopcionSeleccionada)">
+  <!-- Imagen relacionada -->
+  <div class="imagen-container"
+       *ngIf="((opcionSeleccionada === 'Sistemas monofásicos' ||
+               opcionSeleccionada === 'Sistemas trifásicos' ||
+               opcionSeleccionada === 'Análisis AC trifásico' ||
+               opcionSeleccionada === 'Análisis AC velocidad angular' ||
+               opcionSeleccionada === 'Análisis AC General') && selectedEquation)
+              || (opcionSeleccionada !== 'Sistemas monofásicos' &&
+                  opcionSeleccionada !== 'Sistemas trifásicos' &&
+                  opcionSeleccionada !== 'Análisis AC trifásico' &&
+                  opcionSeleccionada !== 'Análisis AC velocidad angular' &&
+                  opcionSeleccionada !== 'Análisis AC General' &&
+                  subsubopcionSeleccionada)">
     <img
-      [src]="
-        (opcionSeleccionada === 'Sistemas monofásicos' ||
-         opcionSeleccionada === 'Sistemas trifásicos' ||
-         opcionSeleccionada === 'Análisis AC trifásico' ||
-         opcionSeleccionada === 'Análisis AC velocidad angular')
-          ? getImagePath(selectedEquation?.formula || '')
-          : getImagePath(subsubopcionSeleccionada || '')
-      "
-      [alt]="
-        (opcionSeleccionada === 'Sistemas monofásicos' ||
-         opcionSeleccionada === 'Sistemas trifásicos' ||
-         opcionSeleccionada === 'Análisis AC trifásico' ||
-         opcionSeleccionada === 'Análisis AC velocidad angular')
-          ? selectedEquation?.formula
-          : subsubopcionSeleccionada
-      "
-      class="imagen-responsive"
-    />
+      [src]="(opcionSeleccionada === 'Sistemas monofásicos' ||
+              opcionSeleccionada === 'Sistemas trifásicos' ||
+              opcionSeleccionada === 'Análisis AC trifásico' ||
+              opcionSeleccionada === 'Análisis AC velocidad angular' ||
+              opcionSeleccionada === 'Análisis AC General')
+              ? getImagePath(selectedEquation?.formula || '')
+              : getImagePath(subsubopcionSeleccionada || '')"
+      [alt]="(opcionSeleccionada === 'Sistemas monofásicos' ||
+              opcionSeleccionada === 'Sistemas trifásicos' ||
+              opcionSeleccionada === 'Análisis AC trifásico' ||
+              opcionSeleccionada === 'Análisis AC velocidad angular' ||
+              opcionSeleccionada === 'Análisis AC General')
+              ? selectedEquation?.formula
+              : subsubopcionSeleccionada"
+      class="imagen-responsive">
   </div>
 
   <!-- Formulario dinámico para grupos personalizados -->
-  <div class="formulario-container" *ngIf="(opcionSeleccionada === 'Sistemas monofásicos' ||
-                                               opcionSeleccionada === 'Sistemas trifásicos' ||
-                                               opcionSeleccionada === 'Análisis AC trifásico' ||
-                                               opcionSeleccionada === 'Análisis AC velocidad angular') && selectedEquation">
+  <div class="formulario-container"
+       *ngIf="(opcionSeleccionada === 'Sistemas monofásicos' ||
+                opcionSeleccionada === 'Sistemas trifásicos' ||
+                opcionSeleccionada === 'Análisis AC trifásico' ||
+                opcionSeleccionada === 'Análisis AC velocidad angular' ||
+                opcionSeleccionada === 'Análisis AC General') && selectedEquation">
     <h2>Formulario para {{ selectedEquation.formula }}</h2>
     <form (ngSubmit)="calcular()">
       <div class="form-group" *ngFor="let variable of equationVariableLabels">
@@ -129,19 +130,20 @@
           [id]="variable"
           [(ngModel)]="formulario[variable]"
           [name]="variable"
-          required
-        />
+          required>
       </div>
       <button type="submit">Calcular</button>
     </form>
   </div>
 
   <!-- Formulario genérico para otros grupos -->
-  <div class="formulario-container" *ngIf="opcionSeleccionada !== 'Sistemas monofásicos' &&
-                                               opcionSeleccionada !== 'Sistemas trifásicos' &&
-                                               opcionSeleccionada !== 'Análisis AC trifásico' &&
-                                               opcionSeleccionada !== 'Análisis AC velocidad angular' &&
-                                               subsubopcionSeleccionada">
+  <div class="formulario-container"
+       *ngIf="opcionSeleccionada !== 'Sistemas monofásicos' &&
+                opcionSeleccionada !== 'Sistemas trifásicos' &&
+                opcionSeleccionada !== 'Análisis AC trifásico' &&
+                opcionSeleccionada !== 'Análisis AC velocidad angular' &&
+                opcionSeleccionada !== 'Análisis AC General' &&
+                subsubopcionSeleccionada">
     <h2>Formulario para {{ subsubopcionSeleccionada }}</h2>
     <form (ngSubmit)="calcular()">
       <div class="form-group">
