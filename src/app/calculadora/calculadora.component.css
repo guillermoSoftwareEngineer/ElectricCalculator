@@ -17,7 +17,6 @@
   margin: 2rem auto;
   padding: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: var(--color-background);
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
   color: var(--color-text);
@@ -46,6 +45,12 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   /* Alinea el contenido horizontalmente */
   text-align: center;
+    /* Usamos ruta relativa desde src/app/calculadora/ */
+    background-image: url('../../assets/images/IngenieroCalculadora.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
 }
 
 /* Botones */
@@ -79,7 +84,7 @@ input {
   border-radius: 6px;
   font-size: 1rem;
   background-color: #cdcdcd;  /* Fondo claro para los inputs */
-  color: var(--color-secondary);           /* Texto oscuro para buen contraste */
+  color: var(--color-secondary); /* Texto oscuro para buen contraste */
   transition: border-color 0.3s ease;
   box-sizing: border-box;  /* Incluye padding y border en el width */
 }
