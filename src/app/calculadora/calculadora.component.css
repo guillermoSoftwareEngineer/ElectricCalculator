@@ -20,6 +20,11 @@
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
   color: var(--color-text);
+  /* Si deseas que el contenedor principal tenga también una imagen de fondo, puedes usar: */
+  /* background-image: url('../../assets/images/IngenieroCalculadora.png'); */
+  /* background-size: cover;
+     background-repeat: no-repeat;
+     background-position: center; */
 }
 
 /* Título principal */
@@ -33,7 +38,21 @@
   letter-spacing: 2px;
 }
 
+/* Estilos para los títulos dentro de los contenedores (por ejemplo, "Selecciona una opción principal") */
+.opciones-container h2,
+.formulario-container h2,
+.resultado-container h2 {
+  background-color: var(--color-background);
+  padding: 0.75rem 1.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  display: inline-block;
+  color: var(--color-text);
+  margin-bottom: 1rem;
+}
+
 /* Contenedores para opciones, formulario y resultado */
+/* (Estos estilos se aplican por defecto; no tienen imagen de fondo asignada, salvo que se les agregue una clase extra) */
 .opciones-container,
 .formulario-container,
 .resultado-container {
@@ -43,21 +62,49 @@
   border: 1px solid var(--color-border);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  /* Alinea el contenido horizontalmente */
   text-align: center;
-    /* Usamos ruta relativa desde src/app/calculadora/ */
-    background-image: url('../../assets/images/IngenieroCalculadora.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+}
 
+/* Fondos variables para contenedores de opciones (usa estas clases adicionales en el HTML) */
+
+/* Contenedor para "Selecciona una opción principal" */
+.opciones-container.main-options {
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+              url('../../assets/images/IngenieroCalculadora.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Contenedor para "Selecciona una subopción" */
+.opciones-container.sub-options {
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+              url('../../assets/images/IngenieraCalculadora.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Contenedor para "Selecciona una opción adicional" */
+.opciones-container.adicionales {
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+              url('../../assets/images/IngenieroCalculadora.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Para que los contenedores de formulario y resultado tengan fondo uniforme sin imagen */
+.formulario-container,
+.resultado-container {
+  background: var(--color-surface);
 }
 
 /* Botones */
 button {
   background-color: var(--color-primary);
   color: var(--color-text);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-text);
   padding: 0.75rem 1.5rem;
   border-radius: 6px;
   font-size: 1rem;
@@ -86,7 +133,7 @@ input {
   background-color: #cdcdcd;  /* Fondo claro para los inputs */
   color: var(--color-secondary); /* Texto oscuro para buen contraste */
   transition: border-color 0.3s ease;
-  box-sizing: border-box;  /* Incluye padding y border en el width */
+  box-sizing: border-box;
 }
 
 input {
