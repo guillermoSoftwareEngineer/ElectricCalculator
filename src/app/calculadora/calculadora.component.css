@@ -1,185 +1,371 @@
-/* Paleta de colores basada en los valores proporcionados */
-:root {
-  --color-background: #141414;    /* Fondo principal muy oscuro */
-  --color-surface: #282828;       /* Superficies: gris oscuro */
-  --color-primary: #230046;       /* Acento primario: tono púrpura oscuro */
-  --color-secondary: #320064;     /* Acento secundario: púrpura intenso */
-  --color-text: #ffffff;          /* Texto blanco para buen contraste */
-  --color-text-secondary: #cccccc; /* Texto secundario en gris claro */
-  --color-border: #320064;         /* Borde con el color secundario para coherencia */
-  --color-input-bg: #cdcdcd;       /* Fondo claro para los inputs */
-  --color-input-text: #141414;     /* Texto oscuro para los inputs para buen contraste */
+/* ============================= */
+/*          Header CSS         */
+/* ============================= */
+
+/* Contenedor para aislar el menú */
+.menu-container-4 {
+  width: 100%;
+  /* Se estableció un aislador, ya que el menú que se expande desde la derecha afecta todo el viewport */
 }
 
-/* Contenedor principal */
+/* Header del menú */
+.menu-container-4 .header-modern-4 {
+  position: relative;
+  max-width: 100%;
+  align-self: center;
+  padding: 10px;
+  background-color: var(--primary, #6A0572);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+}
+
+/* Botón del menú hamburguesa que expande el slider */
+.menu-container-4 .menu-toggle-modern-4 {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 25px;
+  cursor: pointer;
+}
+
+.menu-container-4 .menu-toggle-modern-4 span {
+  display: block;
+  width: 100%;
+  height: 3px;
+  background-color: var(--text-light, #FFFFFF);
+  border-radius: 2px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Animaciones para el menú activo (hamburguesa) */
+.menu-container-4 .menu-toggle-modern-4.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu-container-4 .menu-toggle-modern-4.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-container-4 .menu-toggle-modern-4.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Navegación del menú */
+.menu-container-4 .nav-modern-4 {
+  position: fixed;
+  top: 0;
+  right: -100%; /* Oculta por defecto el menú */
+  width: 60%;
+  height: 100%;
+  background-color: var(--secondary, #F4A261);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: right 0.5s ease-in-out;
+  z-index: 999;
+}
+
+.menu-container-4 .nav-modern-4 img {
+  max-width: 30%;
+  margin-top: 20%;
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 3px solid red;
+  border-radius: 50%;
+  padding: 5px;
+  background-color: var(--background, #F4A261);
+  z-index: 1000;
+}
+
+/* Botón "X" para cerrar el menú */
+.menu-container-4 .close-menu-4 {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: var(--hover, #E76F51);
+  color: var(--text-light, #FFFFFF);
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  text-align: center;
+}
+
+.menu-container-4 .close-menu-4:hover {
+  background-color: var(--background, #264653);
+  color: var(--hover, #E76F51);
+}
+
+/* Cuando el menú está activo, se despliega */
+.menu-container-4 .nav-modern-4.active {
+  right: 0;
+}
+
+.menu-container-4 .nav-modern-4 ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.menu-container-4 .nav-modern-4 ul li a {
+  color: var(--text-light, #FFFFFF);
+  text-decoration: none;
+  font-size: 1.2rem;
+  padding: 10px 20px;
+  border: 2px solid var(--text-light, #FFFFFF);
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.menu-container-4 .nav-modern-4 ul li a:hover {
+  background-color: var(--hover, #E76F51);
+  color: var(--background, #264653);
+}
+
+/* Estilos para pantallas mayores a 425px */
+@media screen and (min-width: 426px) {
+  .menu-container-4 .menu-toggle-modern-4 {
+      display: none; /* Oculta el menú hamburguesa en tamaños grandes */
+  }
+  .menu-container-4 .close-menu-4 {
+      display: none;
+  }
+  .menu-container-4 .nav-modern-4 .logo-modern-4 {
+      max-width: 8%;
+      max-height: 55%;
+      margin-top: 0;
+      left: 20%;
+  }
+  .menu-container-4 .nav-modern-4 {
+      position: static;
+      width: auto;
+      height: auto;
+      flex-direction: row;
+      background-color: transparent;
+      justify-content: center;
+  }
+  .menu-container-4 .nav-modern-4 ul {
+      flex-direction: row;
+      gap: 20px;
+  }
+  .menu-container-4 .nav-modern-4 ul li a {
+      border: none;
+      font-size: 1rem;
+  }
+}
+
+/* Estilos para pantallas mayores a 768px */
+@media screen and (min-width: 768px) {
+  .menu-container-4 .nav-modern-4 .logo-modern-4 {
+      left: 10%;
+  }
+  .info-video {
+    width: 80%;
+  }
+}
+
+/* ============================= */
+/*       Calculadora CSS       */
+/* ============================= */
+
+/* Paleta de colores basada en los valores proporcionados */
+:root {
+--color-background: #141414;    /* Fondo principal muy oscuro */
+--color-surface: #282828;       /* Superficies: gris oscuro */
+--color-primary: #230046;       /* Acento primario: tono púrpura oscuro */
+--color-secondary: #320064;     /* Acento secundario: púrpura intenso */
+--color-text: #ffffff;          /* Texto blanco para buen contraste */
+--color-text-secondary: #cccccc; /* Texto secundario en gris claro */
+--color-border: #320064;         /* Borde con el color secundario para coherencia */
+--color-input-bg: #cdcdcd;       /* Fondo claro para los inputs */
+--color-input-text: #141414;     /* Texto oscuro para los inputs para buen contraste */
+}
+
+/* Contenedor principal de la calculadora */
 .calculadora-container {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 2rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
-  color: var(--color-text);
-  /* Si deseas que el contenedor principal tenga también una imagen de fondo, puedes usar: */
-  /* background-image: url('../../assets/images/IngenieroCalculadora.png'); */
-  /* background-size: cover;
-     background-repeat: no-repeat;
-     background-position: center; */
+max-width: 800px;
+margin: 2rem auto;
+padding: 2rem;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+border-radius: 12px;
+box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+color: var(--color-text);
+/* Fondo de la calculadora: se puede descomentar para usar imagen
+background-image: url('../../assets/images/IngenieroCalculadora.png');
+background-size: cover;
+background-repeat: no-repeat;
+background-position: center;
+*/
 }
 
 /* Título principal */
 .calculadora-titulo {
-  text-align: center;
-  color: var(--color-text-secondary);
-  font-size: 2.5rem;
-  font-weight: 600;
-  margin-bottom: 2rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+text-align: center;
+color: var(--color-text-secondary);
+font-size: 2.5rem;
+font-weight: 600;
+margin-bottom: 2rem;
+text-transform: uppercase;
+letter-spacing: 2px;
 }
 
-/* Estilos para los títulos dentro de los contenedores (por ejemplo, "Selecciona una opción principal") */
+/* Estilos para los títulos dentro de los contenedores (p.ej., "Selecciona una opción principal") */
 .opciones-container h2,
 .formulario-container h2,
 .resultado-container h2 {
-  background-color: var(--color-background);
-  padding: 0.75rem 1.5rem;
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
-  display: inline-block;
-  color: var(--color-text);
-  margin-bottom: 1rem;
+background-color: var(--color-background);
+padding: 0.75rem 1.5rem;
+border: 1px solid var(--color-border);
+border-radius: 6px;
+display: inline-block;
+color: var(--color-text);
+margin-bottom: 1rem;
 }
 
-/* Contenedores para opciones, formulario y resultado */
-/* (Estos estilos se aplican por defecto; no tienen imagen de fondo asignada, salvo que se les agregue una clase extra) */
+/* Contenedores para opciones, formulario y resultado (sin imagen por defecto) */
 .opciones-container,
 .formulario-container,
 .resultado-container {
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  text-align: center;
+margin-bottom: 2rem;
+padding: 1.5rem;
+background-color: var(--color-surface);
+border: 1px solid var(--color-border);
+border-radius: 8px;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+text-align: center;
 }
 
-/* Fondos variables para contenedores de opciones (usa estas clases adicionales en el HTML) */
-
-/* Contenedor para "Selecciona una opción principal" */
+/* Fondos variables para contenedores de opciones (clases adicionales en el HTML) */
+/* "Selecciona una opción principal" */
 .opciones-container.main-options {
-  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-              url('../../assets/images/IngenieroCalculadora.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+            url('../../assets/images/IngenieroCalculadora.png');
+background-size: cover;
+background-repeat: no-repeat;
+background-position: center;
 }
 
-/* Contenedor para "Selecciona una subopción" */
+/* "Selecciona una subopción" */
 .opciones-container.sub-options {
-  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-              url('../../assets/images/IngenieraCalculadora.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+            url('../../assets/images/IngenieraCalculadora.png');
+background-size: cover;
+background-repeat: no-repeat;
+background-position: center;
 }
 
-/* Contenedor para "Selecciona una opción adicional" */
+/* "Selecciona una opción adicional" */
 .opciones-container.adicionales {
-  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-              url('../../assets/images/IngenieroCalculadora.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+            url('../../assets/images/IngenieraCalculadora.png');
+background-size: cover;
+background-repeat: no-repeat;
+background-position: center;
 }
 
-/* Para que los contenedores de formulario y resultado tengan fondo uniforme sin imagen */
-.formulario-container,
+/* Fondo variable para la sección de formulario (usa clase "formulario-fondo") */
+.formulario-container.formulario-fondo {
+background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+            url('../../assets/images/IngenieroCalculadora.png');
+background-size: cover;
+background-repeat: no-repeat;
+background-position: center;
+}
+
+/* Contenedor de resultado sin imagen */
 .resultado-container {
-  background: var(--color-surface);
+background: var(--color-surface);
 }
 
 /* Botones */
 button {
-  background-color: var(--color-primary);
-  color: var(--color-text);
-  border: 1px solid var(--color-text);
-  padding: 0.75rem 1.5rem;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  margin: 0.5rem;
+background-color: var(--color-primary);
+color: var(--color-text);
+border: 1px solid var(--color-text);
+padding: 0.75rem 1.5rem;
+border-radius: 6px;
+font-size: 1rem;
+cursor: pointer;
+transition: background-color 0.3s ease, transform 0.2s ease;
+margin: 0.5rem;
 }
 
 button:hover {
-  background-color: var(--color-secondary);
-  transform: translateY(-2px);
+background-color: var(--color-secondary);
+transform: translateY(-2px);
 }
 
 button:active {
-  transform: translateY(0);
+transform: translateY(0);
 }
 
 /* Inputs del formulario */
 input {
-  width: 100%;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
-  font-size: 1rem;
-  background-color: #cdcdcd;  /* Fondo claro para los inputs */
-  color: var(--color-secondary); /* Texto oscuro para buen contraste */
-  transition: border-color 0.3s ease;
-  box-sizing: border-box;
+width: 100%;
+padding: 0.75rem;
+margin-bottom: 1rem;
+border: 1px solid var(--color-border);
+border-radius: 6px;
+font-size: 1rem;
+background-color: #cdcdcd;  /* Fondo claro para los inputs */
+color: var(--color-secondary);
+transition: border-color 0.3s ease;
+box-sizing: border-box;
 }
 
 input {
-  max-width: 100%;
+max-width: 100%;
 }
 
 input:focus {
-  border-color: var(--color-secondary);
-  outline: none;
+border-color: var(--color-secondary);
+outline: none;
 }
 
 /* Grupos del formulario */
 .form-group {
-  margin-bottom: 1rem;
+margin-bottom: 1rem;
 }
 
 .form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: var(--color-text-secondary);
+display: block;
+margin-bottom: 0.5rem;
+color: var(--color-text-secondary);
 }
 
 /* Imagen responsive */
 .imagen-container {
-  text-align: center;
-  margin-bottom: 1.5rem;
+text-align: center;
+margin-bottom: 1.5rem;
 }
 
 .imagen-responsive {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+max-width: 100%;
+height: auto;
+border-radius: 8px;
+box-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
 /* Estilos responsive */
 @media (max-width: 768px) {
-  .calculadora-container {
-    padding: 1rem;
-  }
-  .calculadora-titulo {
-    font-size: 2rem;
-  }
-  .opciones-container,
-  .formulario-container,
-  .resultado-container {
-    padding: 1rem;
-  }
+.calculadora-container {
+  padding: 1rem;
+}
+.calculadora-titulo {
+  font-size: 2rem;
+}
+.opciones-container,
+.formulario-container,
+.resultado-container {
+  padding: 1rem;
+}
 }
