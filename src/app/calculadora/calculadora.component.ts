@@ -52,13 +52,16 @@ export class CalculadoraComponent {
   };
 
   /*
-    El formulario se generará dinámicamente para grupos personalizados (usando como claves los nombres
-    de las variables de la ecuación seleccionada); para otros casos se usan 3 inputs genéricos.
+    El formulario se generará dinámicamente para grupos personalizados (usando como claves
+    los nombres de las variables de la ecuación seleccionada); para otros casos se usan 3 inputs genéricos.
   */
   formulario: { [key: string]: number | null } = { input1: null, input2: null, input3: null };
 
   // Resultado del cálculo
   resultado: number | null = null;
+
+  // Propiedad para almacenar la unidad a mostrar junto al resultado
+  unidad: string = '';
 
   // Ecuación seleccionada (para grupos personalizados)
   selectedEquation: Equation | null = null;
@@ -352,8 +355,7 @@ export class CalculadoraComponent {
     ]
   };
 
-  // Análisis AC General
-  // Se definen los subgrupos: "KVAR", "KW", "KVA", "X", "I", "V", "R", "W", "tan(φ)", "cos(φ)" y "sen(φ)"
+  // Análisis AC General: se definen los subgrupos: "KVAR", "KW", "KVA", "X", "I", "V", "R", "W", "tan(φ)", "cos(φ)" y "sen(φ)"
   acGeneralEquations: { [sub: string]: Equation[] } = {
     'KVAR': [
       {
@@ -875,9 +877,8 @@ export class CalculadoraComponent {
         compute: (inp) => (Math.pow(+inp["V"], 2) * +inp["X"]) / +inp["Z"]
       },
       {
-        formula: "W = (V² * X) / (2 * X² + Z²)",
+        formula: "W = (V² * X) / (2 * X² + Math.pow(Z, 2))",
         variables: ["V", "X", "Z"],
-        // Se corrigió la expresión para evitar el error con el operador '+'
         compute: (inp) => (Math.pow(+inp["V"], 2) * +inp["X"]) / (2 * Math.pow(+inp["X"], 2) + Math.pow(+inp["Z"], 2))
       }
     ],
@@ -924,7 +925,7 @@ export class CalculadoraComponent {
         compute: (inp) => +inp["VAR"] / (+inp["VA"] * +inp["cos(φ)"])
       },
       {
-        formula: "tan(φ) = (X * V²) / (Z² - X²)",
+        formula: "tan(φ) = (X * V²) / (Math.pow(Z,2) - Math.pow(X,2))",
         variables: ["X", "V", "Z"],
         compute: (inp) => (+inp["X"] * Math.pow(+inp["V"], 2)) / (Math.pow(+inp["Z"], 2) - Math.pow(+inp["X"], 2))
       },
@@ -1168,7 +1169,7 @@ export class CalculadoraComponent {
       ) {
         this.formulario = {};
         for (const variable of this.selectedEquation.variables) {
-          // Para Análisis AC trifásico y Análisis AC General, asignamos valores predeterminados para ciertas variables.
+          // Para AC trifásico y AC General se asignan valores predeterminados para ciertas variables.
           if (
             (this.opcionSeleccionada === 'Análisis AC trifásico' || this.opcionSeleccionada === 'Análisis AC General') &&
             variable === 'cos(φ)'
@@ -1189,7 +1190,7 @@ export class CalculadoraComponent {
     this.resultado = null;
   }
 
-  // Método para calcular el resultado
+  // Método para calcular el resultado y asignar la unidad correspondiente
   calcular(): void {
     if (
       this.opcionSeleccionada === 'Sistemas monofásicos' ||
@@ -1215,6 +1216,50 @@ export class CalculadoraComponent {
     } else {
       // Lógica para otros grupos (valor temporal)
       this.resultado = Math.random() * 100;
+    }
+
+    // Asignación de la unidad según la opción y subopción
+    if (
+      this.opcionSeleccionada === 'Sistemas monofásicos' ||
+      this.opcionSeleccionada === 'Sistemas trifásicos' ||
+      this.opcionSeleccionada === 'Análisis AC trifásico'
+    ) {
+      if (this.subopcionSeleccionada === 'Vatios') {
+        this.unidad = 'Watios';
+      } else if (this.subopcionSeleccionada === 'Resistencia') {
+        this.unidad = 'Ohmios';
+      } else if (this.subopcionSeleccionada === 'Corriente') {
+        this.unidad = 'Amperios';
+      } else if (this.subopcionSeleccionada === 'Voltaje') {
+        this.unidad = 'Voltios';
+      }
+    } else if (this.opcionSeleccionada === 'Análisis AC velocidad angular') {
+      if (this.subopcionSeleccionada === 'Frecuencia Angular (ω)') {
+        this.unidad = 'rad/s';
+      } else if (
+        this.subopcionSeleccionada === 'Reactancia Inductiva (XL)' ||
+        this.subopcionSeleccionada === 'Reactancia Capacitiva (XC)' ||
+        this.subopcionSeleccionada === 'Impedancia (Z)'
+      ) {
+        this.unidad = 'Ohmios';
+      }
+    } else if (this.opcionSeleccionada === 'Análisis AC General') {
+      switch (this.subopcionSeleccionada) {
+        case 'KVAR': this.unidad = 'kVAR'; break;
+        case 'KW': this.unidad = 'KW'; break;
+        case 'KVA': this.unidad = 'KVA'; break;
+        case 'X': this.unidad = 'Ohmios'; break;
+        case 'I': this.unidad = 'Amperios'; break;
+        case 'V': this.unidad = 'Voltios'; break;
+        case 'R': this.unidad = 'Ohmios'; break;
+        case 'W': this.unidad = 'Watios'; break;
+        case 'tan(φ)': this.unidad = 'tan φ'; break;
+        case 'cos(φ)': this.unidad = 'cos φ'; break;
+        case 'sen(φ)': this.unidad = 'sen φ'; break;
+        default: this.unidad = '';
+      }
+    } else {
+      this.unidad = '';
     }
   }
 

@@ -1,5 +1,35 @@
 <div class="calculadora-container">
-  <h1 class="calculadora-titulo">Calculadora Reactiva</h1>
+  <!-- Recuadro de Instrucciones y Convenciones -->
+  <div class="instrucciones-container" style="border: 2px solid #320064; padding: 1rem; margin-bottom: 1.5rem; background-color: #282828; color: #ffffff; border-radius: 8px; text-align: center;">
+    <h2>Instrucciones de Uso</h2>
+    <p>Esta calculadora reactiva permite realizar diversos cálculos eléctricos y de análisis de circuitos utilizando fórmulas basadas en sistemas monofásicos, trifásicos, análisis AC y velocidad angular.</p>
+    <p><strong>Modo de Uso:</strong> Seleccione la opción principal, luego la subopción y, finalmente, la fórmula deseada. Ingrese los valores en los campos correspondientes y presione el botón <em>Calcular</em> para obtener el resultado con la unidad adecuada.</p>
+    <p style="font-style: italic;">Nota: Cuando en una fórmula se usa un factor de 1000, se asume que los resultados se expresan en kilo unidades (por ejemplo, kVA, kilo ohmios, etc.).</p>
+    <p style="font-style: italic;">Además, las variables <strong>cos(φ)</strong>, <strong>tan(φ)</strong> y <strong>sen(φ)</strong> se asignan con valores predeterminados (por ejemplo, 0.9000, 0.7000 y 0.5000 respectivamente) que pueden ser modificados por el usuario, y el valor de <strong>π</strong> se considera 3.1416.</p>
+    <p><strong>Importante:</strong> Los valores a ingresar siempre son en la unidad de ohmios, voltios, amperios o watios.</p>
+    <h3>Convenciones y Símbolos</h3>
+    <ul style="list-style: none; margin: 1rem auto; max-width: 600px; text-align: center; column-count: 2; column-gap: 2rem; padding: 0;">
+      <li style="text-align: center;"><strong>V</strong> - Voltage (Voltios)</li>
+      <li style="text-align: center;"><strong>I</strong> - Current (Amperios)</li>
+      <li style="text-align: center;"><strong>R</strong> - Resistance (Ohmios)</li>
+      <li style="text-align: center;"><strong>W</strong> - Active Power (Watios)</li>
+      <li style="text-align: center;"><strong>kVA</strong> - Apparent Power</li>
+      <li style="text-align: center;"><strong>kW</strong> - Active Power</li>
+      <li style="text-align: center;"><strong>kVAR</strong> - Reactive Power</li>
+      <li style="text-align: center;"><strong>f</strong> - Frequency</li>
+      <li style="text-align: center;"><strong>C</strong> - Capacitance</li>
+      <li style="text-align: center;"><strong>L</strong> - Inductance</li>
+      <li style="text-align: center;"><strong>X</strong> - Reactance</li>
+      <li style="text-align: center;"><strong>Xc</strong> - Capacitive Reactance</li>
+      <li style="text-align: center;"><strong>XL</strong> - Inductive Reactance</li>
+      <li style="text-align: center;"><strong>Z</strong> - Impedance (Ohmios)</li>
+      <li style="text-align: center;"><strong>ω</strong> - Angular Velocity (rad/s)</li>
+      <li style="text-align: center;"><strong>π</strong> - 3.1416</li>
+      <li style="text-align: center;"><strong>cos(φ)</strong> - Coseno de φ</li>
+      <li style="text-align: center;"><strong>tan(φ)</strong> - Tangente de φ</li>
+      <li style="text-align: center;"><strong>sen(φ)</strong> - Seno de φ</li>
+    </ul>
+  </div>
 
   <!-- Opciones principales -->
   <div class="opciones-container">
@@ -40,7 +70,6 @@
           {{ item.formula }}
         </button>
       </ng-container>
-
       <!-- Caso para Sistemas trifásicos -->
       <ng-container *ngIf="opcionSeleccionada === 'Sistemas trifásicos'">
         <button
@@ -50,7 +79,6 @@
           {{ item.formula }}
         </button>
       </ng-container>
-
       <!-- Caso para Análisis AC trifásico -->
       <ng-container *ngIf="opcionSeleccionada === 'Análisis AC trifásico'">
         <button
@@ -60,7 +88,6 @@
           {{ item.formula }}
         </button>
       </ng-container>
-
       <!-- Caso para Análisis AC velocidad angular -->
       <ng-container *ngIf="opcionSeleccionada === 'Análisis AC velocidad angular'">
         <button
@@ -70,7 +97,6 @@
           {{ item.formula }}
         </button>
       </ng-container>
-
       <!-- Caso para Análisis AC General -->
       <ng-container *ngIf="opcionSeleccionada === 'Análisis AC General'">
         <button
@@ -95,7 +121,7 @@
                   opcionSeleccionada !== 'Análisis AC trifásico' &&
                   opcionSeleccionada !== 'Análisis AC velocidad angular' &&
                   opcionSeleccionada !== 'Análisis AC General' &&
-                  subsubopcionSeleccionada)">
+                  subopcionSeleccionada)">
     <img
       [src]="(opcionSeleccionada === 'Sistemas monofásicos' ||
               opcionSeleccionada === 'Sistemas trifásicos' ||
@@ -103,14 +129,14 @@
               opcionSeleccionada === 'Análisis AC velocidad angular' ||
               opcionSeleccionada === 'Análisis AC General')
               ? getImagePath(selectedEquation?.formula || '')
-              : getImagePath(subsubopcionSeleccionada || '')"
+              : getImagePath(subopcionSeleccionada || '')"
       [alt]="(opcionSeleccionada === 'Sistemas monofásicos' ||
               opcionSeleccionada === 'Sistemas trifásicos' ||
               opcionSeleccionada === 'Análisis AC trifásico' ||
               opcionSeleccionada === 'Análisis AC velocidad angular' ||
               opcionSeleccionada === 'Análisis AC General')
               ? selectedEquation?.formula
-              : subsubopcionSeleccionada"
+              : subopcionSeleccionada"
       class="imagen-responsive">
   </div>
 
@@ -143,8 +169,8 @@
                 opcionSeleccionada !== 'Análisis AC trifásico' &&
                 opcionSeleccionada !== 'Análisis AC velocidad angular' &&
                 opcionSeleccionada !== 'Análisis AC General' &&
-                subsubopcionSeleccionada">
-    <h2>Formulario para {{ subsubopcionSeleccionada }}</h2>
+                subopcionSeleccionada">
+    <h2>Formulario para {{ subopcionSeleccionada }}</h2>
     <form (ngSubmit)="calcular()">
       <div class="form-group">
         <label for="input1">Input 1:</label>
@@ -165,6 +191,6 @@
   <!-- Resultado -->
   <div class="resultado-container" *ngIf="resultado !== null">
     <h2>Resultado</h2>
-    <p>{{ resultado }} Watios</p>
+    <p>{{ resultado }} {{ unidad }}</p>
   </div>
 </div>
