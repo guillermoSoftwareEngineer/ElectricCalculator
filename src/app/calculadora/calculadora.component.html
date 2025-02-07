@@ -24,21 +24,16 @@
   <!-- Recuadro de Instrucciones y Convenciones -->
   <div class="instrucciones-container" style="border: 2px solid #320064; padding: 1rem; margin-bottom: 1.5rem; background-color: #282828; color: #ffffff; border-radius: 8px; text-align: center;">
     <h2>Instrucciones de Uso</h2>
-    <p>
-      Esta calculadora reactiva permite realizar diversos cálculos eléctricos y de análisis de circuitos utilizando fórmulas basadas en sistemas monofásicos, trifásicos, análisis AC y velocidad angular.
-    </p>
-    <p>
-      <strong>Modo de Uso:</strong> Seleccione la opción principal (esto desplegará las subopciones más abajo), luego la subopción (esto desplegará las fórmulas correspondientes más abajo) y, finalmente, la fórmula deseada (esto desplegará el formulario de ingreso de datos). Ingrese los valores en los campos correspondientes y presione el botón <em>Calcular</em> para obtener el resultado con la unidad adecuada.
-    </p>
-    <p style="font-style: italic;">
-      Nota: Cuando en una fórmula se usa un factor de 1000, se asume que los resultados se expresan en kilo unidades (por ejemplo, kVA, kilo ohmios, etc.).
-    </p>
-    <p style="font-style: italic;">
-      Además, las variables <strong>cos(φ)</strong>, <strong>tan(φ)</strong> y <strong>sen(φ)</strong> se asignan con valores predeterminados (que pueden modificarse) y el valor de <strong>π</strong> se considera 3.1416.
-    </p>
-    <p>
-      <strong>Importante:</strong> Los valores a ingresar siempre son en la unidad de ohmios, voltios, amperios o watios.
-    </p>
+    <p>Esta calculadora reactiva permite realizar diversos cálculos eléctricos y de análisis de circuitos utilizando fórmulas basadas en sistemas monofásicos, trifásicos, análisis ac y velocidad angular.</p>
+
+    <p>modo de uso: seleccione el sistema (esto desplegará las subopciones más abajo), luego seleccione la variable (esto desplegará las fórmulas correspondientes más abajo) y, finalmente, seleccione la fórmula (esto desplegará el formulario de ingreso de datos). ingrese los valores en los campos correspondientes y presione el botón calcular para obtener el resultado con la unidad adecuada.</p>
+
+    <p><strong>NOTA:</strong> CUANDO EN UNA FÓRMULA SE USA UN FACTOR DE 1000, SE ASUME QUE LOS RESULTADOS SE EXPRESAN EN KILO UNIDADES (POR EJEMPLO, KVA, KILO OHMIOS, ETC.).</p>
+
+    <p><strong>ADEMÁS, LAS VARIABLES COS(φ), TAN(φ) Y SEN(φ) SE ASIGNAN CON VALORES PREDETERMINADOS (QUE PUEDEN MODIFICARSE) Y EL VALOR DE π SE CONSIDERA 3.1416.</strong></p>
+
+    <p><strong>IMPORTANTE:</strong> LOS VALORES A INGRESAR SIEMPRE SON EN LA UNIDAD DE OHMIOS, VOLTIOS, AMPERIOS O WATIOS.</p>
+
     <h3>Convenciones y Símbolos</h3>
     <ul style="list-style: none; margin: 1rem auto; max-width: 600px; text-align: center; column-count: 2; column-gap: 2rem; padding: 0;">
       <li style="text-align: center;"><strong>V</strong> - Voltage (Voltios)</li>
@@ -65,7 +60,7 @@
 
   <!-- Opciones principales (con fondo variable: main-options) -->
   <div class="opciones-container main-options">
-    <h2>Selecciona una opción principal:</h2>
+    <h2>SELECCIONA EL SISTEMA:</h2>
     <div class="opciones-list">
       <button *ngFor="let opcion of opcionesPrincipales"
               (click)="seleccionarOpcion(opcion)"
@@ -77,7 +72,7 @@
 
   <!-- Subopciones (con fondo variable: sub-options) -->
   <div class="opciones-container sub-options" *ngIf="opcionSeleccionada">
-    <h2>Selecciona una subopción:</h2>
+    <h2>SELECCIONA LA VARIABLE:</h2>
     <div class="opciones-list">
       <button *ngFor="let subopcion of (opcionSeleccionada ? subopciones[opcionSeleccionada] : [])"
               (click)="seleccionarSubopcion(subopcion)"
@@ -89,7 +84,7 @@
 
   <!-- Opciones adicionales (con fondo variable: adicionales) -->
   <div class="opciones-container adicionales" *ngIf="subopcionSeleccionada">
-    <h2>Selecciona una opción adicional:</h2>
+    <h2>SELECCIONA LA FÓRMULA:</h2>
     <div class="opciones-list">
       <!-- Según la opción principal, se muestra la lista correspondiente -->
       <ng-container *ngIf="opcionSeleccionada === 'Sistemas monofásicos'">
