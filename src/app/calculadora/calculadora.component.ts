@@ -30,7 +30,7 @@ export class CalculadoraComponent implements AfterViewInit {
   subopciones: { [key: string]: string[] } = {
     'Sistemas monofásicos': ['Vatios', 'Resistencia', 'Corriente', 'Voltaje'],
     'Sistemas trifásicos': ['Vatios', 'Resistencia', 'Corriente', 'Voltaje'],
-    'cos φ (phi)': ['Potencia', 'VA', 'Corriente', 'Resistencia', 'Voltaje', 'Factor de Potencia'],
+    'cos φ (phi)': ['Potencia', 'VA', 'Corriente', 'Resistencia', 'Voltaje', 'cos φ (phi)'],
     'Análisis AC velocidad angular': ['Frecuencia Angular (ω)', 'Reactancia Inductiva (XL)', 'Reactancia Capacitiva (XC)', 'Impedancia (Z)'],
     'Análisis AC General': ['KVAR', 'KW', 'KVA', 'X', 'I', 'V', 'R', 'W', 'tan(φ)', 'cos(φ)', 'sen(φ)']
   };
@@ -112,7 +112,7 @@ export class CalculadoraComponent implements AfterViewInit {
       { formula: "V = (I * R) / cos(φ)", variables: ["I", "R", "cos(φ)"], compute: (inp) => (+inp["I"] * +inp["R"]) / +inp["cos(φ)"] },
       { formula: "V = W / (I * cos(φ))", variables: ["W", "I", "cos(φ)"], compute: (inp) => +inp["W"] / (+inp["I"] * +inp["cos(φ)"]) }
     ],
-    'Factor de Potencia': [
+    'cos φ (phi)': [
       { formula: "cos(φ) = W / (V * I)", variables: ["W", "V", "I"], compute: (inp) => +inp["W"] / (+inp["V"] * +inp["I"]) },
       { formula: "cos(φ) = W / VA", variables: ["W", "VA"], compute: (inp) => +inp["W"] / +inp["VA"] },
       { formula: "cos(φ) = (I² * R) / VA", variables: ["I", "R", "VA"], compute: (inp) => (Math.pow(+inp["I"], 2) * +inp["R"]) / +inp["VA"] }
