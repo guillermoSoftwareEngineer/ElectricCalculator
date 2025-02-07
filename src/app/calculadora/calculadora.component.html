@@ -1,3 +1,25 @@
+<!-- Header (Menu Header) -->
+<div class="menu-header">
+  <header class="header-modern">
+    <div class="menu-toggle-modern">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <nav class="nav-modern">
+      <img src="../../assets/images/circle-logo.png" class="logo-modern" alt="Logo">
+      <ul>
+        <li><a href="#">Inicio</a></li>
+        <li><a href="#">Servicios</a></li>
+        <li><a href="#">Proyectos</a></li>
+        <li><a href="#">Contacto</a></li>
+      </ul>
+      <button class="close-menu">X</button>
+    </nav>
+  </header>
+</div>
+
+<!-- Calculadora -->
 <div class="calculadora-container">
   <!-- Recuadro de Instrucciones y Convenciones -->
   <div class="instrucciones-container" style="border: 2px solid #320064; padding: 1rem; margin-bottom: 1.5rem; background-color: #282828; color: #ffffff; border-radius: 8px; text-align: center;">
@@ -6,8 +28,7 @@
       Esta calculadora reactiva permite realizar diversos cálculos eléctricos y de análisis de circuitos utilizando fórmulas basadas en sistemas monofásicos, trifásicos, análisis AC y velocidad angular.
     </p>
     <p>
-      <strong>Modo de Uso:</strong>
-      Seleccione la opción principal; <em>al hacerlo, se desplegarán las subopciones más abajo</em>. Luego, elija la subopción deseada; <em>al seleccionarla, se mostrarán las fórmulas correspondientes en la sección inferior</em>. Finalmente, escoja la fórmula que desea aplicar; <em>al hacerlo, se desplegará el formulario de ingreso de datos justo debajo</em>. Ingrese los valores en los campos correspondientes y presione el botón <em>Calcular</em> para obtener el resultado acompañado de la unidad adecuada.
+      <strong>Modo de Uso:</strong> Seleccione la opción principal (esto desplegará las subopciones más abajo), luego la subopción (esto desplegará las fórmulas correspondientes más abajo) y, finalmente, la fórmula deseada (esto desplegará el formulario de ingreso de datos). Ingrese los valores en los campos correspondientes y presione el botón <em>Calcular</em> para obtener el resultado con la unidad adecuada.
     </p>
     <p style="font-style: italic;">
       Nota: Cuando en una fórmula se usa un factor de 1000, se asume que los resultados se expresan en kilo unidades (por ejemplo, kVA, kilo ohmios, etc.).
@@ -16,7 +37,7 @@
       Además, las variables <strong>cos(φ)</strong>, <strong>tan(φ)</strong> y <strong>sen(φ)</strong> se asignan con valores predeterminados (que pueden modificarse) y el valor de <strong>π</strong> se considera 3.1416.
     </p>
     <p>
-      <strong>Importante:</strong> Los valores a ingresar siempre deben estar en la unidad de ohmios, voltios, amperios o watios.
+      <strong>Importante:</strong> Los valores a ingresar siempre son en la unidad de ohmios, voltios, amperios o watios.
     </p>
     <h3>Convenciones y Símbolos</h3>
     <ul style="list-style: none; margin: 1rem auto; max-width: 600px; text-align: center; column-count: 2; column-gap: 2rem; padding: 0;">
@@ -109,7 +130,7 @@
     </div>
   </div>
 
-  <!-- Sección de formulario con fondo variable (usa clase formulario-fondo) -->
+  <!-- Sección de formulario con fondo variable (usa clase "formulario-fondo") -->
   <div class="formulario-container formulario-fondo" *ngIf="(opcionSeleccionada === 'Sistemas monofásicos' ||
       opcionSeleccionada === 'Sistemas trifásicos' ||
       opcionSeleccionada === 'Análisis AC trifásico' ||

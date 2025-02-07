@@ -1,11 +1,11 @@
 // Definición de la interfaz para las ecuaciones
 interface Equation {
   formula: string;
-  variables: string[]; // Ejemplo: ["V", "R"] o ["V", "cos(φ)", "I"] o ["f", "L"], etc.
+  variables: string[]; // Ejemplo: ["V", "R"], ["V", "cos(φ)", "I"], etc.
   compute: (inputs: { [key: string]: number }) => number;
 }
 
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -16,7 +16,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './calculadora.component.html',
   styleUrls: ['./calculadora.component.css']
 })
-export class CalculadoraComponent {
+export class CalculadoraComponent implements AfterViewInit {
   // Opciones principales
   opcionesPrincipales: string[] = [
     'Sistemas monofásicos',
@@ -915,7 +915,7 @@ export class CalculadoraComponent {
         compute: (inp) => (+inp["VA"] * +inp["sen(φ)"]) / +inp["W"]
       },
       {
-        formula: "tan(φ) = (VAR * VA) / (VA² - VAR²)",
+        formula: "tan(φ) = (VAR * VA) / (Math.pow(VA,2) - Math.pow(VAR,2))",
         variables: ["VAR", "VA"],
         compute: (inp) => (+inp["VAR"] * +inp["VA"]) / (Math.pow(+inp["VA"], 2) - Math.pow(+inp["VAR"], 2))
       },
@@ -968,7 +968,7 @@ export class CalculadoraComponent {
         compute: (inp) => +inp["R"] / Math.sqrt(Math.pow(+inp["R"], 2) + Math.pow(+inp["X"], 2))
       },
       {
-        formula: "cos(φ) = 1 / sqrt(1 + tan²(φ))",
+        formula: "cos(φ) = 1 / sqrt(1 + Math.pow(tan(φ),2))",
         variables: ["tan(φ)"],
         compute: (inp) => 1 / Math.sqrt(1 + Math.pow(+inp["tan(φ)"], 2))
       },
@@ -1003,7 +1003,7 @@ export class CalculadoraComponent {
         compute: (inp) => +inp["X"] / (+inp["Z"] * +inp["tan(φ)"])
       },
       {
-        formula: "cos(φ) = (Z * W) / V²",
+        formula: "cos(φ) = (Z * W) / Math.pow(V,2)",
         variables: ["Z", "W", "V"],
         compute: (inp) => (+inp["Z"] * +inp["W"]) / Math.pow(+inp["V"], 2)
       }
@@ -1016,7 +1016,7 @@ export class CalculadoraComponent {
         compute: (inp) => +inp["VAR"] / +inp["VA"]
       },
       {
-        formula: "sen(φ) = tan(φ) / sqrt(1 + tan²(φ))",
+        formula: "sen(φ) = tan(φ) / sqrt(1 + Math.pow(tan(φ),2))",
         variables: ["tan(φ)"],
         compute: (inp) => +inp["tan(φ)"] / Math.sqrt(1 + Math.pow(+inp["tan(φ)"], 2))
       },
@@ -1036,7 +1036,7 @@ export class CalculadoraComponent {
         compute: (inp) => (+inp["X"] * +inp["tan(φ)"]) / +inp["Z"]
       },
       {
-        formula: "sen(φ) = sqrt(1 - cos²(φ))",
+        formula: "sen(φ) = sqrt(1 - Math.pow(cos(φ),2))",
         variables: ["cos(φ)"],
         compute: (inp) => Math.sqrt(1 - Math.pow(+inp["cos(φ)"], 2))
       },
@@ -1267,5 +1267,29 @@ export class CalculadoraComponent {
   getImagePath(opcion: string): string {
     const fileName = opcion.replace(/\s/g, '').toLowerCase() + '.png';
     return `assets/images/${fileName}`;
+  }
+
+  // ----------------------------
+  // Funcionalidad para el header (menu)
+  // ----------------------------
+  ngAfterViewInit(): void {
+    // Usamos los nuevos nombres de clases para el header
+    const menuToggle = document.querySelector(".menu-header .menu-toggle-modern") as HTMLElement | null;
+    const nav = document.querySelector(".menu-header .nav-modern") as HTMLElement | null;
+    const closeButton = document.querySelector(".menu-header .close-menu") as HTMLElement | null;
+
+    if (menuToggle && nav) {
+      menuToggle.addEventListener("click", () => {
+        menuToggle.classList.toggle("active");
+        nav.classList.toggle("active");
+      });
+    }
+
+    if (closeButton && nav && menuToggle) {
+      closeButton.addEventListener("click", () => {
+        nav.classList.remove("active");
+        menuToggle.classList.remove("active");
+      });
+    }
   }
 }
