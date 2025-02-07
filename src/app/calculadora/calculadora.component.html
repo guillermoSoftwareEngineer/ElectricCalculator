@@ -24,16 +24,11 @@
   <!-- Recuadro de Instrucciones y Convenciones -->
   <div class="instrucciones-container" style="border: 2px solid #320064; padding: 1rem; margin-bottom: 1.5rem; background-color: #282828; color: #ffffff; border-radius: 8px; text-align: center;">
     <h2>Instrucciones de Uso</h2>
-    <p>Esta calculadora reactiva permite realizar diversos cálculos eléctricos y de análisis de circuitos utilizando fórmulas basadas en sistemas monofásicos, trifásicos, análisis ac y velocidad angular.</p>
-
-    <p>modo de uso: seleccione el sistema (esto desplegará las subopciones más abajo), luego seleccione la variable (esto desplegará las fórmulas correspondientes más abajo) y, finalmente, seleccione la fórmula (esto desplegará el formulario de ingreso de datos). ingrese los valores en los campos correspondientes y presione el botón calcular para obtener el resultado con la unidad adecuada.</p>
-
+    <p>Esta calculadora reactiva permite realizar diversos cálculos eléctricos y de análisis de circuitos utilizando fórmulas basadas en sistemas monofásicos, trifásicos, análisis AC y velocidad angular.</p>
+    <p>Modo de uso: seleccione el sistema (esto desplegará las subopciones más abajo), luego seleccione la variable (esto desplegará las fórmulas correspondientes más abajo) y, finalmente, seleccione la fórmula (esto desplegará el formulario de ingreso de datos). Ingrese los valores en los campos correspondientes y presione el botón calcular para obtener el resultado con la unidad adecuada.</p>
     <p><strong>NOTA:</strong> CUANDO EN UNA FÓRMULA SE USA UN FACTOR DE 1000, SE ASUME QUE LOS RESULTADOS SE EXPRESAN EN KILO UNIDADES (POR EJEMPLO, KVA, KILO OHMIOS, ETC.).</p>
-
     <p><strong>ADEMÁS, LAS VARIABLES COS(φ), TAN(φ) Y SEN(φ) SE ASIGNAN CON VALORES PREDETERMINADOS (QUE PUEDEN MODIFICARSE) Y EL VALOR DE π SE CONSIDERA 3.1416.</strong></p>
-
     <p><strong>IMPORTANTE:</strong> LOS VALORES A INGRESAR SIEMPRE SON EN LA UNIDAD DE OHMIOS, VOLTIOS, AMPERIOS O WATIOS.</p>
-
     <h3>Convenciones y Símbolos</h3>
     <ul style="list-style: none; margin: 1rem auto; max-width: 600px; text-align: center; column-count: 2; column-gap: 2rem; padding: 0;">
       <li style="text-align: center;"><strong>V</strong> - Voltage (Voltios)</li>
@@ -101,7 +96,7 @@
           {{ item.formula }}
         </button>
       </ng-container>
-      <ng-container *ngIf="opcionSeleccionada === 'Análisis AC trifásico'">
+      <ng-container *ngIf="opcionSeleccionada === 'cos φ (phi)'">
         <button *ngFor="let item of acTrifasicoEquations[subopcionSeleccionada!] ; let i = index"
                 (click)="seleccionarSubsubopcion(i)"
                 [class.active]="selectedEquation && selectedEquation.formula === item.formula">
@@ -128,7 +123,7 @@
   <!-- Sección de formulario con fondo variable (usa clase "formulario-fondo") -->
   <div class="formulario-container formulario-fondo" *ngIf="(opcionSeleccionada === 'Sistemas monofásicos' ||
       opcionSeleccionada === 'Sistemas trifásicos' ||
-      opcionSeleccionada === 'Análisis AC trifásico' ||
+      opcionSeleccionada === 'cos φ (phi)' ||
       opcionSeleccionada === 'Análisis AC velocidad angular' ||
       opcionSeleccionada === 'Análisis AC General') && selectedEquation">
     <h2>Formulario para {{ selectedEquation.formula }}</h2>
@@ -144,7 +139,7 @@
   <!-- Formulario genérico para otros grupos -->
   <div class="formulario-container" *ngIf="opcionSeleccionada !== 'Sistemas monofásicos' &&
       opcionSeleccionada !== 'Sistemas trifásicos' &&
-      opcionSeleccionada !== 'Análisis AC trifásico' &&
+      opcionSeleccionada !== 'cos φ (phi)' &&
       opcionSeleccionada !== 'Análisis AC velocidad angular' &&
       opcionSeleccionada !== 'Análisis AC General' && subopcionSeleccionada">
     <h2>Formulario para {{ subopcionSeleccionada }}</h2>
