@@ -351,3 +351,97 @@ input:focus {
     padding: 1rem;
   }
 }
+
+
+/* Nuevos estilos para el footer */
+.footer-4 {
+  background: linear-gradient(135deg, #20232A, #181A1F);
+  padding: 40px 20px;
+  color: #FFFFFF;
+  border-top: 3px solid #3A3D46;
+}
+
+.footer-container-4 {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.icon-4 {
+  border-radius: 50%;
+}
+
+.footer-icon-link-4 {
+  margin: auto;
+}
+
+@media (min-width: 768px) {
+  .footer-container-4 {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.footer-contact-4 {
+  max-width: 500px;
+  text-align: left;
+}
+
+.footer-title-4 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.footer-text-4 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #B0BEC5;
+  margin-bottom: 20px;
+  padding: 5%;
+  text-align: center;
+}
+
+.footer-button-4 {
+  display: inline-block;
+  background-color: #43A047;
+  color: #FFFFFF;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.footer-button-4:hover {
+  background-color: #2E7D32;
+  transform: scale(1.1);
+}
+
+.footer-icons-4 {
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
+}
+
+.icon-4 {
+  width: 50px;
+  height: 50px;
+  background-color: #282C34;
+  padding: 10px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.footer-icon-link-4:hover .icon-4 {
+  transform: scale(1.1);
+  background-color: #3A3D46;
+}
+
+@media (min-width: 1024px) {
+  .footer-container-4 {
+    flex-direction: column;
+  }
+}
