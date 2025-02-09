@@ -21,7 +21,7 @@ export class CalculadoraComponent implements AfterViewInit {
   opcionesPrincipales: string[] = [
     'Sistemas monofásicos',
     'Sistemas trifásicos',
-    'cos φ (phi)',
+    'Análisis AC coseno de φ', // Cambiado de "cos φ (phi)" a "Análisis AC coseno de φ"
     'Análisis AC velocidad angular',
     'Análisis AC General'
   ];
@@ -30,7 +30,7 @@ export class CalculadoraComponent implements AfterViewInit {
   subopciones: { [key: string]: string[] } = {
     'Sistemas monofásicos': ['Vatios', 'Resistencia', 'Corriente', 'Voltaje'],
     'Sistemas trifásicos': ['Vatios', 'Resistencia', 'Corriente', 'Voltaje'],
-    'cos φ (phi)': ['Potencia', 'VA', 'Corriente', 'Resistencia', 'Voltaje', 'Factor de Potencia'],
+    'Análisis AC coseno de φ': ['Potencia', 'VA', 'Corriente', 'Resistencia', 'Voltaje', 'coseno de φ'], // Cambiado de "Factor de Potencia" a "coseno de φ"
     'Análisis AC velocidad angular': ['Frecuencia Angular (ω)', 'Reactancia Inductiva (XL)', 'Reactancia Capacitiva (XC)', 'Impedancia (Z)'],
     'Análisis AC General': ['KVAR', 'KW', 'KVA', 'X', 'I', 'V', 'R', 'W', 'tan(φ)', 'cos(φ)', 'sen(φ)']
   };
@@ -40,7 +40,19 @@ export class CalculadoraComponent implements AfterViewInit {
   subopcionSeleccionada: string | null = null;
   subsubopcionSeleccionada: string | null = null;
 
-  // Estructura de ecuaciones personalizadas
+  // Variables del formulario
+  formulario: { [key: string]: number | null } = { input1: null, input2: null, input3: null };
+
+  // Resultado del cálculo
+  resultado: number | null = null;
+
+  // Unidad del resultado
+  unidad: string = '';
+
+  // Ecuación seleccionada
+  selectedEquation: Equation | null = null;
+
+  // Definición de las ecuaciones
   monofasicoEquations: { [sub: string]: Equation[] } = {
     'Vatios': [
       { formula: "W = V² / R", variables: ["V", "R"], compute: (inp) => Math.pow(+inp["V"], 2) / +inp["R"] },
@@ -90,6 +102,7 @@ export class CalculadoraComponent implements AfterViewInit {
   acTrifasicoEquations: { [sub: string]: Equation[] } = {
     'Potencia': [
       { formula: "W = V * I * cos(φ)", variables: ["V", "I", "cos(φ)"], compute: (inp) => +inp["V"] * +inp["I"] * +inp["cos(φ)"] },
+      { formula: "W = VA * cos(φ)", variables: ["VA", "cos(φ)"], compute: (inp) => +inp["VA"] * +inp["cos(φ)"] },
       { formula: "W = (V * cos(φ))² / R", variables: ["V", "cos(φ)", "R"], compute: (inp) => Math.pow(+inp["V"] * +inp["cos(φ)"], 2) / +inp["R"] }
     ],
     'VA': [
@@ -98,13 +111,13 @@ export class CalculadoraComponent implements AfterViewInit {
       { formula: "VA = I² * R / cos(φ)", variables: ["I", "R", "cos(φ)"], compute: (inp) => (Math.pow(+inp["I"], 2) * +inp["R"]) / +inp["cos(φ)"] }
     ],
     'Corriente': [
-      { formula: "I = VA / V", variables: ["VA", "V"], compute: (inp) => +inp["VA"] / +inp["V"] },
+      { formula: "I = V * cos(φ) / R", variables: ["V", "cos(φ)", "R"], compute: (inp) => (+inp["V"] * +inp["cos(φ)"]) / +inp["R"] },
       { formula: "I = W / (V * cos(φ))", variables: ["W", "V", "cos(φ)"], compute: (inp) => +inp["W"] / (+inp["V"] * +inp["cos(φ)"]) },
-      { formula: "I = (V * cos(φ)) / R", variables: ["V", "cos(φ)", "R"], compute: (inp) => (+inp["V"] * +inp["cos(φ)"]) / +inp["R"] }
+      { formula: "I = VA / V", variables: ["VA", "V"], compute: (inp) => +inp["VA"] / +inp["V"] }
     ],
     'Resistencia': [
+      { formula: "R = (V * cos(φ)) / I", variables: ["V", "cos(φ)", "I"], compute: (inp) => (+inp["V"] * +inp["cos(φ)"]) / +inp["I"] },
       { formula: "R = (VA * cos(φ)) / I²", variables: ["VA", "cos(φ)", "I"], compute: (inp) => (+inp["VA"] * +inp["cos(φ)"]) / Math.pow(+inp["I"], 2) },
-      { formula: "R = V * cos(φ) / I", variables: ["V", "cos(φ)", "I"], compute: (inp) => (+inp["V"] * +inp["cos(φ)"]) / +inp["I"] },
       { formula: "R = (V * cos(φ))² / W", variables: ["V", "cos(φ)", "W"], compute: (inp) => Math.pow(+inp["V"] * +inp["cos(φ)"], 2) / +inp["W"] }
     ],
     'Voltaje': [
@@ -112,7 +125,7 @@ export class CalculadoraComponent implements AfterViewInit {
       { formula: "V = (I * R) / cos(φ)", variables: ["I", "R", "cos(φ)"], compute: (inp) => (+inp["I"] * +inp["R"]) / +inp["cos(φ)"] },
       { formula: "V = W / (I * cos(φ))", variables: ["W", "I", "cos(φ)"], compute: (inp) => +inp["W"] / (+inp["I"] * +inp["cos(φ)"]) }
     ],
-    'Factor de Potencia': [
+    'coseno de φ': [
       { formula: "cos(φ) = W / (V * I)", variables: ["W", "V", "I"], compute: (inp) => +inp["W"] / (+inp["V"] * +inp["I"]) },
       { formula: "cos(φ) = W / VA", variables: ["W", "VA"], compute: (inp) => +inp["W"] / +inp["VA"] },
       { formula: "cos(φ) = (I² * R) / VA", variables: ["I", "R", "VA"], compute: (inp) => (Math.pow(+inp["I"], 2) * +inp["R"]) / +inp["VA"] }
@@ -152,18 +165,6 @@ export class CalculadoraComponent implements AfterViewInit {
     'sen(φ)': []
   };
 
-  // Variables del formulario
-  formulario: { [key: string]: number | null } = { input1: null, input2: null, input3: null };
-
-  // Resultado del cálculo
-  resultado: number | null = null;
-
-  // Unidad del resultado
-  unidad: string = '';
-
-  // Ecuación seleccionada
-  selectedEquation: Equation | null = null;
-
   // Getter para las etiquetas de las variables de la ecuación
   get equationVariableLabels(): string[] {
     return this.selectedEquation ? this.selectedEquation.variables : [];
@@ -196,7 +197,7 @@ export class CalculadoraComponent implements AfterViewInit {
         this.selectedEquation = this.trifasicoEquations[this.subopcionSeleccionada][param];
         this.resetearFormulario(true);
       }
-    } else if (this.opcionSeleccionada === 'cos φ (phi)' && this.subopcionSeleccionada) {
+    } else if (this.opcionSeleccionada === 'Análisis AC coseno de φ' && this.subopcionSeleccionada) {
       if (typeof param === 'number') {
         this.selectedEquation = this.acTrifasicoEquations[this.subopcionSeleccionada][param];
         this.resetearFormulario(true);
@@ -232,6 +233,7 @@ export class CalculadoraComponent implements AfterViewInit {
       }
     }
     this.resultado = null;
+    this.unidad = ''; // Resetear la unidad al resetear el formulario
   }
 
   calcular(): void {
@@ -247,8 +249,71 @@ export class CalculadoraComponent implements AfterViewInit {
         inputs[variable] = +this.formulario[variable]!;
       }
       this.resultado = this.selectedEquation.compute(inputs);
+      this.asignarUnidad(); // Asignar la unidad correcta
     } else {
       this.resultado = Math.random() * 100;
+      this.unidad = ''; // Si no hay ecuación seleccionada, no hay unidad
+    }
+  }
+
+  // Método para asignar la unidad correcta
+  asignarUnidad(): void {
+    if (this.subopcionSeleccionada) {
+      switch (this.subopcionSeleccionada) {
+        case 'Vatios':
+        case 'W':
+          this.unidad = 'Watts';
+          break;
+        case 'Resistencia':
+        case 'R':
+          this.unidad = 'Ohmios';
+          break;
+        case 'Corriente':
+        case 'I':
+          this.unidad = 'Amperios';
+          break;
+        case 'Voltaje':
+        case 'V':
+          this.unidad = 'Voltios';
+          break;
+        case 'Potencia':
+          this.unidad = 'Watts';
+          break;
+        case 'VA':
+          this.unidad = 'Voltios-Amperios';
+          break;
+        case 'coseno de φ':
+          this.unidad = '';
+          break;
+        case 'Frecuencia Angular (ω)':
+          this.unidad = 'rad/s';
+          break;
+        case 'Reactancia Inductiva (XL)':
+        case 'Reactancia Capacitiva (XC)':
+        case 'Impedancia (Z)':
+          this.unidad = 'Ohmios';
+          break;
+        case 'KVAR':
+          this.unidad = 'kVAR';
+          break;
+        case 'KW':
+          this.unidad = 'kW';
+          break;
+        case 'KVA':
+          this.unidad = 'kVA';
+          break;
+        case 'X':
+          this.unidad = 'Ohmios';
+          break;
+        case 'tan(φ)':
+        case 'cos(φ)':
+        case 'sen(φ)':
+          this.unidad = '';
+          break;
+        default:
+          this.unidad = '';
+          break;
+      }
     }
   }
 

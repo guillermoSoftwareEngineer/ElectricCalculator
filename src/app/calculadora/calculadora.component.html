@@ -96,7 +96,7 @@
           {{ item.formula }}
         </button>
       </ng-container>
-      <ng-container *ngIf="opcionSeleccionada === 'cos φ (phi)'">
+      <ng-container *ngIf="opcionSeleccionada === 'Análisis AC coseno de φ'">
         <button *ngFor="let item of acTrifasicoEquations[subopcionSeleccionada!] ; let i = index"
                 (click)="seleccionarSubsubopcion(i)"
                 [class.active]="selectedEquation && selectedEquation.formula === item.formula">
@@ -123,7 +123,7 @@
   <!-- Sección de formulario con fondo variable (usa clase "formulario-fondo") -->
   <div class="formulario-container formulario-fondo" *ngIf="(opcionSeleccionada === 'Sistemas monofásicos' ||
       opcionSeleccionada === 'Sistemas trifásicos' ||
-      opcionSeleccionada === 'cos φ (phi)' ||
+      opcionSeleccionada === 'Análisis AC coseno de φ' ||
       opcionSeleccionada === 'Análisis AC velocidad angular' ||
       opcionSeleccionada === 'Análisis AC General') && selectedEquation">
     <h2>Formulario para {{ selectedEquation.formula }}</h2>
@@ -139,7 +139,7 @@
   <!-- Formulario genérico para otros grupos -->
   <div class="formulario-container" *ngIf="opcionSeleccionada !== 'Sistemas monofásicos' &&
       opcionSeleccionada !== 'Sistemas trifásicos' &&
-      opcionSeleccionada !== 'cos φ (phi)' &&
+      opcionSeleccionada !== 'Análisis AC coseno de φ' &&
       opcionSeleccionada !== 'Análisis AC velocidad angular' &&
       opcionSeleccionada !== 'Análisis AC General' && subopcionSeleccionada">
     <h2>Formulario para {{ subopcionSeleccionada }}</h2>
