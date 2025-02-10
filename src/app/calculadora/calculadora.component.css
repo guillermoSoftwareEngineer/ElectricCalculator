@@ -263,11 +263,6 @@
   background-position: center;
 }
 
-/* Contenedor de resultado sin imagen */
-.resultado-container {
-  background: var(--color-surface);
-}
-
 /* Botones */
 button {
   background-color: var(--color-primary);
@@ -351,7 +346,6 @@ input:focus {
     padding: 1rem;
   }
 }
-
 
 /* Nuevos estilos para el footer */
 .footer-4 {
