@@ -230,7 +230,7 @@
 /* "Selecciona una opción principal" */
 .opciones-container.main-options {
   background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-              url('./assets/images/IngenieraCalculadora.png');
+              url('/assets/images/IngenieraCalculadora.png');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -239,7 +239,7 @@
 /* "Selecciona una subopción" */
 .opciones-container.sub-options {
   background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-              url('./src/assets/images/IngenieroCalculadora.png');
+              url('/assets/images/IngenieroCalculadora.png');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -248,7 +248,7 @@
 /* "Selecciona una opción adicional" */
 .opciones-container.adicionales {
   background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-              url('./assets/images/IngenieraCalculadora.png');
+              url('/assets/images/IngenieraCalculadora.png');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -257,7 +257,7 @@
 /* Fondo variable para la sección de formulario */
 .formulario-container.formulario-fondo {
   background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-              url('./assets/images/IngenieroCalculadora.png');
+              url('/assets/images/IngenieroCalculadora.png');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
