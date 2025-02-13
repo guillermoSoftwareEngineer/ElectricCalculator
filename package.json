@@ -4,10 +4,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --configuration=production",
+    "postbuild": "node copy-images.js",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "postbuild": "node move-files.js"
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {
@@ -29,6 +29,7 @@
     "@angular/compiler-cli": "^19.1.0",
     "@types/jasmine": "~5.1.0",
     "angular-cli-ghpages": "^2.0.3",
+    "fs-extra": "^11.3.0",
     "jasmine-core": "~5.5.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
