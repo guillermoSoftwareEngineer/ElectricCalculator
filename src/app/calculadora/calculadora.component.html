@@ -1,4 +1,4 @@
-<!-- Header (Menu Header) -->
+<!-- Header (Menu Header)
 <div class="menu-header">
   <header class="header-modern">
     <div class="menu-toggle-modern">
@@ -17,7 +17,7 @@
       <button class="close-menu">X</button>
     </nav>
   </header>
-</div>
+</div> -->
 
 <!-- Calculadora -->
 <div class="calculadora-container">
@@ -131,6 +131,10 @@
       <div class="form-group" *ngFor="let variable of equationVariableLabels">
         <label [for]="variable">{{ variable }}:</label>
         <input type="number" [id]="variable" [(ngModel)]="formulario[variable]" [name]="variable" required>
+        <!-- Aclaración solo para cos(φ) -->
+        <small *ngIf="variable === 'cos(φ)'">
+          Ingrese el valor del factor de potencia (cos(φ)), por ejemplo: 0.8, 0.9, etc.
+        </small>
       </div>
       <button type="submit">Calcular</button>
     </form>
@@ -166,25 +170,3 @@
     <p>{{ resultado }} {{ unidad }}</p>
   </div>
 </div>
-
-<footer class="footer-4">
-  <div class="footer-container-4">
-    <div class="footer-contact-4">
-      <h3 class="footer-title-4">Conéctate con Nosotros</h3>
-      <p class="footer-text-4">
-        Explora mis redes sociales y envíame un mensaje para colaborar en proyectos innovadores.
-      </p>
-    </div>
-    <div class="footer-icons-4">
-      <a href="https://www.linkedin.com/in/guillermovasbendev/" target="_blank" class="footer-icon-link-4">
-        <img src="./assets/images/icon-4-linkedin.png" alt="LinkedIn" class="icon-4">
-      </a>
-      <a href="https://github.com/guillermoSoftwareEngineer" target="_blank" class="footer-icon-link-4">
-        <img src="./assets/images/icon-4-github.png" alt="GitHub" class="icon-4">
-      </a>
-      <a href="./assets/images/e-mail.png" class="footer-icon-link-4" target="_blank">
-        <img src="./assets/images/icon-4-email.png" alt="Correo Electrónico" class="icon-4">
-      </a>
-    </div>
-  </div>
-</footer>
